@@ -1,0 +1,27 @@
+{
+  "never": {
+    "final_recall10": 74.83,
+    "refresh_count": 0,
+    "refresh_total_time_s": 0.0
+  },
+  "every_25000": {
+    "final_recall10": 97.77,
+    "refresh_count": 9,
+    "refresh_total_time_s": 63.61
+  },
+  "every_50000": {
+    "final_recall10": 97.77,
+    "refresh_count": 9,
+    "refresh_total_time_s": 65.66
+  },
+  "every_100000": {
+    "final_recall10": 97.77,
+    "refresh_count": 9,
+    "refresh_total_time_s": 62.33
+  },
+  "every_250000": {
+    "final_recall10": 97.82,
+    "refresh_count": 3,
+    "refresh_total_time_s": 21.69
+  }
+}

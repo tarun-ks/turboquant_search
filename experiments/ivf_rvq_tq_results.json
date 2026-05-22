@@ -1,0 +1,326 @@
+{
+  "deep-1m": {
+    "ivf-tq-paper-5bit": {
+      "bits": 4,
+      "refine": 1,
+      "total_bits": 5,
+      "memory_mb": 61.0,
+      "train_s": 13.0,
+      "add_s": 8.2,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.8984999999999912,
+          "qps": 151,
+          "search_s": 6.6
+        },
+        "np40": {
+          "recall_at_10": 0.9132999999999909,
+          "qps": 78,
+          "search_s": 12.7
+        }
+      }
+    },
+    "ivf-tq-paper-6bit": {
+      "bits": 5,
+      "refine": 1,
+      "total_bits": 6,
+      "memory_mb": 72.5,
+      "train_s": 19.1,
+      "add_s": 9.3,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.9312999999999939,
+          "qps": 150,
+          "search_s": 6.6
+        },
+        "np40": {
+          "recall_at_10": 0.9507999999999942,
+          "qps": 78,
+          "search_s": 12.8
+        }
+      }
+    },
+    "ivf-tq-paper-7bit": {
+      "bits": 6,
+      "refine": 1,
+      "total_bits": 7,
+      "memory_mb": 83.9,
+      "train_s": 18.9,
+      "add_s": 10.2,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.9446999999999953,
+          "qps": 150,
+          "search_s": 6.6
+        },
+        "np40": {
+          "recall_at_10": 0.9656999999999961,
+          "qps": 76,
+          "search_s": 13.1
+        }
+      }
+    },
+    "ivf-rvq-3+2-5bit": {
+      "bits": 3,
+      "refine": 2,
+      "total_bits": 5,
+      "memory_mb": 61.0,
+      "train_s": 17.8,
+      "add_s": 7.9,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.8940999999999917,
+          "qps": 151,
+          "search_s": 6.6
+        },
+        "np40": {
+          "recall_at_10": 0.909999999999991,
+          "qps": 75,
+          "search_s": 13.3
+        }
+      }
+    },
+    "ivf-rvq-4+2-6bit": {
+      "bits": 4,
+      "refine": 2,
+      "total_bits": 6,
+      "memory_mb": 72.5,
+      "train_s": 20.2,
+      "add_s": 8.7,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.9299999999999936,
+          "qps": 150,
+          "search_s": 6.7
+        },
+        "np40": {
+          "recall_at_10": 0.9483999999999939,
+          "qps": 76,
+          "search_s": 13.1
+        }
+      }
+    },
+    "ivf-rvq-3+3-6bit": {
+      "bits": 3,
+      "refine": 3,
+      "total_bits": 6,
+      "memory_mb": 72.5,
+      "train_s": 21.5,
+      "add_s": 8.4,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.9294999999999936,
+          "qps": 150,
+          "search_s": 6.6
+        },
+        "np40": {
+          "recall_at_10": 0.9479999999999938,
+          "qps": 76,
+          "search_s": 13.0
+        }
+      }
+    },
+    "ivf-rvq-4+3-7bit": {
+      "bits": 4,
+      "refine": 3,
+      "total_bits": 7,
+      "memory_mb": 83.9,
+      "train_s": 18.2,
+      "add_s": 9.3,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.9468999999999955,
+          "qps": 147,
+          "search_s": 6.8
+        },
+        "np40": {
+          "recall_at_10": 0.9681999999999964,
+          "qps": 77,
+          "search_s": 13.0
+        }
+      }
+    },
+    "ivf-rvq-5+2-7bit": {
+      "bits": 5,
+      "refine": 2,
+      "total_bits": 7,
+      "memory_mb": 83.9,
+      "train_s": 19.2,
+      "add_s": 9.9,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.9473999999999954,
+          "qps": 148,
+          "search_s": 6.7
+        },
+        "np40": {
+          "recall_at_10": 0.9675999999999961,
+          "qps": 76,
+          "search_s": 13.1
+        }
+      }
+    }
+  },
+  "sift-1m": {
+    "ivf-tq-paper-5bit": {
+      "bits": 4,
+      "refine": 1,
+      "total_bits": 5,
+      "memory_mb": 80.1,
+      "train_s": 24.8,
+      "add_s": 10.5,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.8753999999999915,
+          "qps": 114,
+          "search_s": 8.7
+        },
+        "np40": {
+          "recall_at_10": 0.8981999999999906,
+          "qps": 58,
+          "search_s": 17.0
+        }
+      }
+    },
+    "ivf-tq-paper-6bit": {
+      "bits": 5,
+      "refine": 1,
+      "total_bits": 6,
+      "memory_mb": 95.4,
+      "train_s": 26.9,
+      "add_s": 12.2,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.909699999999993,
+          "qps": 113,
+          "search_s": 8.8
+        },
+        "np40": {
+          "recall_at_10": 0.9376999999999928,
+          "qps": 58,
+          "search_s": 17.1
+        }
+      }
+    },
+    "ivf-tq-paper-7bit": {
+      "bits": 6,
+      "refine": 1,
+      "total_bits": 7,
+      "memory_mb": 110.6,
+      "train_s": 27.2,
+      "add_s": 14.8,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.9315999999999947,
+          "qps": 115,
+          "search_s": 8.7
+        },
+        "np40": {
+          "recall_at_10": 0.9628999999999953,
+          "qps": 58,
+          "search_s": 17.0
+        }
+      }
+    },
+    "ivf-rvq-3+2-5bit": {
+      "bits": 3,
+      "refine": 2,
+      "total_bits": 5,
+      "memory_mb": 80.1,
+      "train_s": 22.1,
+      "add_s": 9.2,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.8719999999999921,
+          "qps": 116,
+          "search_s": 8.6
+        },
+        "np40": {
+          "recall_at_10": 0.8953999999999908,
+          "qps": 58,
+          "search_s": 17.0
+        }
+      }
+    },
+    "ivf-rvq-4+2-6bit": {
+      "bits": 4,
+      "refine": 2,
+      "total_bits": 6,
+      "memory_mb": 95.4,
+      "train_s": 25.3,
+      "add_s": 11.0,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.911999999999993,
+          "qps": 115,
+          "search_s": 8.7
+        },
+        "np40": {
+          "recall_at_10": 0.939599999999993,
+          "qps": 58,
+          "search_s": 17.2
+        }
+      }
+    },
+    "ivf-rvq-3+3-6bit": {
+      "bits": 3,
+      "refine": 3,
+      "total_bits": 6,
+      "memory_mb": 95.4,
+      "train_s": 21.0,
+      "add_s": 10.8,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.9101999999999929,
+          "qps": 114,
+          "search_s": 8.7
+        },
+        "np40": {
+          "recall_at_10": 0.9373999999999926,
+          "qps": 57,
+          "search_s": 17.5
+        }
+      }
+    },
+    "ivf-rvq-4+3-7bit": {
+      "bits": 4,
+      "refine": 3,
+      "total_bits": 7,
+      "memory_mb": 110.6,
+      "train_s": 24.3,
+      "add_s": 11.1,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.9275999999999943,
+          "qps": 116,
+          "search_s": 8.6
+        },
+        "np40": {
+          "recall_at_10": 0.9591999999999947,
+          "qps": 59,
+          "search_s": 16.9
+        }
+      }
+    },
+    "ivf-rvq-5+2-7bit": {
+      "bits": 5,
+      "refine": 2,
+      "total_bits": 7,
+      "memory_mb": 110.6,
+      "train_s": 23.6,
+      "add_s": 12.1,
+      "by_nprobe": {
+        "np20": {
+          "recall_at_10": 0.9308999999999946,
+          "qps": 116,
+          "search_s": 8.6
+        },
+        "np40": {
+          "recall_at_10": 0.9623999999999951,
+          "qps": 58,
+          "search_s": 17.0
+        }
+      }
+    }
+  }
+}

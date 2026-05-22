@@ -1,0 +1,90 @@
+{
+  "pair": "L6->L12",
+  "cos_sample_avg": 0.5113670825958252,
+  "config": {
+    "n_init": 200000,
+    "n_new": 800000,
+    "batch": 100000,
+    "nlist": 500,
+    "nprobe": 20,
+    "m_pq": 96,
+    "n_queries": 5000,
+    "dim": 384,
+    "old_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "new_model": "sentence-transformers/all-MiniLM-L12-v2"
+  },
+  "steps": [
+    {
+      "step": "Initial 200K (old-enc)",
+      "n_indexed": 200000,
+      "ivf_tq": 91.21,
+      "ivf_pq_stale": 73.89,
+      "ivf_pq_retrain": 73.89,
+      "retrain_time_cumulative_s": 0.0
+    },
+    {
+      "step": "+100K new-enc",
+      "n_indexed": 300000,
+      "ivf_tq": 85.05,
+      "ivf_pq_stale": 72.46,
+      "ivf_pq_retrain": 74.75,
+      "retrain_time_cumulative_s": 45.6
+    },
+    {
+      "step": "+200K new-enc",
+      "n_indexed": 400000,
+      "ivf_tq": 85.67,
+      "ivf_pq_stale": 72.47,
+      "ivf_pq_retrain": 75.3,
+      "retrain_time_cumulative_s": 93.9
+    },
+    {
+      "step": "+300K new-enc",
+      "n_indexed": 500000,
+      "ivf_tq": 86.0,
+      "ivf_pq_stale": 72.39,
+      "ivf_pq_retrain": 75.78,
+      "retrain_time_cumulative_s": 148.7
+    },
+    {
+      "step": "+400K new-enc",
+      "n_indexed": 600000,
+      "ivf_tq": 86.2,
+      "ivf_pq_stale": 72.4,
+      "ivf_pq_retrain": 75.75,
+      "retrain_time_cumulative_s": 205.8
+    },
+    {
+      "step": "+500K new-enc",
+      "n_indexed": 700000,
+      "ivf_tq": 86.5,
+      "ivf_pq_stale": 72.4,
+      "ivf_pq_retrain": 75.76,
+      "retrain_time_cumulative_s": 264.0
+    },
+    {
+      "step": "+600K new-enc",
+      "n_indexed": 800000,
+      "ivf_tq": 87.08,
+      "ivf_pq_stale": 72.27,
+      "ivf_pq_retrain": 75.66,
+      "retrain_time_cumulative_s": 325.6
+    },
+    {
+      "step": "+700K new-enc",
+      "n_indexed": 900000,
+      "ivf_tq": 87.31,
+      "ivf_pq_stale": 72.42,
+      "ivf_pq_retrain": 75.56,
+      "retrain_time_cumulative_s": 393.1
+    },
+    {
+      "step": "+800K new-enc",
+      "n_indexed": 1000000,
+      "ivf_tq": 87.58,
+      "ivf_pq_stale": 72.52,
+      "ivf_pq_retrain": 75.67,
+      "retrain_time_cumulative_s": 464.7
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+\begin{table}[t]
+\caption{SIFT-1M streaming under three ingestion conditions, 3 seeds (42, 123, 7777). Recall@10 reported as mean $\pm$ 95\% CI (t-distribution, df=2). Paired t-tests on within-seed differences. Memory: IVF-TQ 672 bits/vec, IVF-PQ 512 bits/vec (0.76$\times$ IVF-TQ).}
+\label{tab:streaming_controls_main}
+\centering\small
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Condition} & \textbf{IVF-TQ (200K$\to$1M)} & \textbf{IVF-PQ (200K$\to$1M)} & \textbf{TQ $\Delta$} & \textbf{PQ $\Delta$} \\
+\midrule
+  Original order & 89.55 $\pm$ 0.19 $\to$ 92.05 $\pm$ 0.14 & 73.23 $\pm$ 0.46 $\to$ 69.29 $\pm$ 0.40 & $+2.51 \pm 0.09$ pp, $p<0.001$ & $-3.94 \pm 0.17$ pp, $p<0.001$ \\
+  Shuffled (i.i.d.) & 89.55 $\pm$ 0.19 $\to$ 92.05 $\pm$ 0.15 & 73.23 $\pm$ 0.46 $\to$ 69.29 $\pm$ 0.40 & $+2.50 \pm 0.09$ pp, $p<0.001$ & $-3.94 \pm 0.17$ pp, $p<0.001$ \\
+  Mean-shift (0.05/batch) & 89.55 $\pm$ 0.19 $\to$ 91.37 $\pm$ 0.17 & 73.23 $\pm$ 0.46 $\to$ 70.66 $\pm$ 0.36 & $+1.82 \pm 0.36$ pp, $p=0.002$ & $-2.57 \pm 0.32$ pp, $p<0.001$ \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,14 @@
+{
+  "rabitq": {
+    "recall10": 6.0,
+    "memory_mb": 23.4,
+    "compression": 20.9,
+    "bits_per_dim": 1
+  },
+  "ivf_tq": {
+    "recall10": 82.2,
+    "memory_mb": 80.6,
+    "compression": 6.1,
+    "bits_per_dim": 5
+  }
+}

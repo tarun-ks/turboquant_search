@@ -1,0 +1,11 @@
+{
+  "ivf_tq_4bit": {
+    "ndcg10": 39.4
+  },
+  "ivf_pq_stale_codebook": {
+    "ndcg10": 38.24
+  },
+  "ivf_pq_fresh_codebook": {
+    "ndcg10": 39.28
+  }
+}

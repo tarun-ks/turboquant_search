@@ -1,0 +1,93 @@
+{
+  "steps": [
+    {
+      "step": "Initial (1M)",
+      "n_indexed": 1000000,
+      "ivf_tq": 83.93,
+      "ivf_pq_stale": 72.43,
+      "ivf_pq_retrain": 72.43,
+      "retrain_time_cumulative_s": 0.0
+    },
+    {
+      "step": "Batch 1 (2M)",
+      "n_indexed": 2000000,
+      "ivf_tq": 84.4,
+      "ivf_pq_stale": 70.86,
+      "ivf_pq_retrain": 71.23,
+      "retrain_time_cumulative_s": 21.4
+    },
+    {
+      "step": "Batch 2 (3M)",
+      "n_indexed": 3000000,
+      "ivf_tq": 84.58,
+      "ivf_pq_stale": 69.84,
+      "ivf_pq_retrain": 69.69,
+      "retrain_time_cumulative_s": 47.4
+    },
+    {
+      "step": "Batch 3 (4M)",
+      "n_indexed": 4000000,
+      "ivf_tq": 84.57,
+      "ivf_pq_stale": 69.19,
+      "ivf_pq_retrain": 69.36,
+      "retrain_time_cumulative_s": 77.6
+    },
+    {
+      "step": "Batch 4 (5M)",
+      "n_indexed": 5000000,
+      "ivf_tq": 84.66,
+      "ivf_pq_stale": 68.51,
+      "ivf_pq_retrain": 68.04,
+      "retrain_time_cumulative_s": 111.9
+    },
+    {
+      "step": "Batch 5 (6M)",
+      "n_indexed": 6000000,
+      "ivf_tq": 84.7,
+      "ivf_pq_stale": 68.13,
+      "ivf_pq_retrain": 68.1,
+      "retrain_time_cumulative_s": 151.5
+    },
+    {
+      "step": "Batch 6 (7M)",
+      "n_indexed": 7000000,
+      "ivf_tq": 84.58,
+      "ivf_pq_stale": 67.68,
+      "ivf_pq_retrain": 67.68,
+      "retrain_time_cumulative_s": 195.5
+    },
+    {
+      "step": "Batch 7 (8M)",
+      "n_indexed": 8000000,
+      "ivf_tq": 84.48,
+      "ivf_pq_stale": 67.2,
+      "ivf_pq_retrain": 67.61,
+      "retrain_time_cumulative_s": 244.1
+    },
+    {
+      "step": "Batch 8 (9M)",
+      "n_indexed": 9000000,
+      "ivf_tq": 84.42,
+      "ivf_pq_stale": 66.88,
+      "ivf_pq_retrain": 67.16,
+      "retrain_time_cumulative_s": 296.6
+    },
+    {
+      "step": "Batch 9 (10M)",
+      "n_indexed": 10000000,
+      "ivf_tq": 84.56,
+      "ivf_pq_stale": 66.44,
+      "ivf_pq_retrain": 66.67,
+      "retrain_time_cumulative_s": 353.5
+    }
+  ],
+  "config": {
+    "dataset": "SIFT-10M",
+    "n_initial": 1000000,
+    "batch_size": 1000000,
+    "n_batches": 9,
+    "nlist": 3162,
+    "nprobe": 20,
+    "m_pq": 64
+  }
+}

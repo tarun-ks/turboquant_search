@@ -1,0 +1,52 @@
+=== SIFT-1M controls ===
+  Original order: TQ 89.55→92.05 (Δ=+2.51, p=0.000); PQ 73.23→69.29 (Δ=-3.94, p=0.000)
+  Shuffled (i.i.d.): TQ 89.55→92.05 (Δ=+2.50, p=0.000); PQ 73.23→69.29 (Δ=-3.94, p=0.000)
+  Mean-shift (0.05/batch): TQ 89.55→91.37 (Δ=+1.82, p=0.002); PQ 73.23→70.66 (Δ=-2.57, p=0.001)
+
+=== Deep-10M (streaming_deep10m_multiseed.csv) ===
+seeds: [np.int64(42), np.int64(123), np.int64(7777)]
+  IVF-TQ: 1M=87.39±0.33 | 10M=86.59±0.17 | Δ=-0.80pp (p=0.005)
+  IVF-PQ stale: 1M=82.11±0.15 | 10M=78.87±0.36 | Δ=-3.23pp (p=0.001)
+  IVF-PQ retrain: 1M=82.11±0.15 | 10M=78.94±0.09 | Δ=-3.17pp (p=0.000)
+  IVF-TQ vs IVF-PQ stale at 10M: Δ=+7.72±0.26pp (p=0.000)
+  IVF-PQ stale vs retrain at 10M: Δ=-0.06±0.44pp (p=0.595)
+
+=== SIFT-10M (streaming_sift10m_multiseed.csv) ===
+seeds: [np.int64(42), np.int64(123), np.int64(7777)]
+  IVF-TQ: 1M=83.91±0.08 | 10M=84.47±0.28 | Δ=+0.56pp (p=0.007)
+  IVF-PQ stale: 1M=72.42±0.41 | 10M=66.61±0.70 | Δ=-5.80pp (p=0.000)
+  IVF-PQ retrain: 1M=72.42±0.41 | 10M=66.78±0.25 | Δ=-5.64pp (p=0.000)
+  IVF-TQ vs IVF-PQ stale at 10M: Δ=+17.86±0.47pp (p=0.000)
+  IVF-PQ stale vs retrain at 10M: Δ=-0.17±0.50pp (p=0.289)
+
+=== Deep-10M (PQ $m{=}96$, 8-bit) (streaming_deep10m_pqhigh_multiseed.csv) ===
+seeds: [np.int64(42), np.int64(123), np.int64(7777)]
+  IVF-TQ: 1M=87.39±0.33 | 10M=86.59±0.17 | Δ=-0.80pp (p=0.005)
+  IVF-PQ stale: 1M=91.30±0.28 | 10M=92.72±0.51 | Δ=+1.42pp (p=0.003)
+  IVF-PQ retrain: 1M=91.30±0.28 | 10M=92.80±0.17 | Δ=+1.50pp (p=0.003)
+  IVF-TQ vs IVF-PQ stale at 10M: Δ=-6.13±0.34pp (p=0.000)
+  IVF-PQ stale vs retrain at 10M: Δ=-0.08±0.42pp (p=0.516)
+
+=== SIFT-10M (PQ $m{=}128$, 8-bit) (streaming_sift10m_pqhigh_multiseed.csv) ===
+seeds: [np.int64(42), np.int64(123), np.int64(7777)]
+  IVF-TQ: 1M=83.91±0.08 | 10M=84.47±0.28 | Δ=+0.56pp (p=0.007)
+  IVF-PQ stale: 1M=85.42±0.16 | 10M=86.50±0.31 | Δ=+1.09pp (p=0.001)
+  IVF-PQ retrain: 1M=85.42±0.16 | 10M=86.60±0.34 | Δ=+1.18pp (p=0.004)
+  IVF-TQ vs IVF-PQ stale at 10M: Δ=-2.03±0.10pp (p=0.000)
+  IVF-PQ stale vs retrain at 10M: Δ=-0.09±0.31pp (p=0.317)
+
+=== Deep-10M (PQ $m{=}48$, 10-bit) (streaming_deep10m_pqmatched_multiseed.csv) ===
+seeds: [np.int64(42), np.int64(123), np.int64(7777)]
+  IVF-TQ: 1M=87.39±0.33 | 10M=86.59±0.17 | Δ=-0.80pp (p=0.005)
+  IVF-PQ stale: 1M=87.21±0.28 | 10M=86.37±0.21 | Δ=-0.84pp (p=0.005)
+  IVF-PQ retrain: 1M=87.21±0.28 | 10M=86.41±0.23 | Δ=-0.80pp (p=0.012)
+  IVF-TQ vs IVF-PQ stale at 10M: Δ=+0.22±0.05pp (p=0.003)
+  IVF-PQ stale vs retrain at 10M: Δ=-0.04±0.43pp (p=0.737)
+
+=== SIFT-10M (PQ $m{=}64$, 10-bit) (streaming_sift10m_pqmatched_multiseed.csv) ===
+seeds: [np.int64(42), np.int64(123), np.int64(7777)]
+  IVF-TQ: 1M=83.91±0.08 | 10M=84.47±0.28 | Δ=+0.56pp (p=0.007)
+  IVF-PQ stale: 1M=80.00±0.44 | 10M=77.69±0.04 | Δ=-2.31pp (p=0.002)
+  IVF-PQ retrain: 1M=80.00±0.44 | 10M=77.61±0.12 | Δ=-2.40pp (p=0.001)
+  IVF-TQ vs IVF-PQ stale at 10M: Δ=+6.79±0.25pp (p=0.000)
+  IVF-PQ stale vs retrain at 10M: Δ=+0.08±0.07pp (p=0.040)

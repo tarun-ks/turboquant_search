@@ -1,0 +1,78 @@
+{
+  "n_vectors": 9990000,
+  "n_queries": 10000,
+  "dim": 96,
+  "faiss": {
+    "m48": {
+      "np10": {
+        "recall10": 75.2,
+        "qps": 26259,
+        "memory_mb": 458.5
+      },
+      "np20": {
+        "recall10": 78.9,
+        "qps": 14441,
+        "memory_mb": 458.5
+      },
+      "np40": {
+        "recall10": 80.5,
+        "qps": 7391,
+        "memory_mb": 458.5
+      },
+      "np80": {
+        "recall10": 81.2,
+        "qps": 3892,
+        "memory_mb": 458.5
+      },
+      "np160": {
+        "recall10": 81.3,
+        "qps": 2023,
+        "memory_mb": 458.5
+      }
+    },
+    "m96": {
+      "np10": {
+        "recall10": 87.2,
+        "qps": 13843,
+        "memory_mb": 915.8
+      },
+      "np20": {
+        "recall10": 92.7,
+        "qps": 7240,
+        "memory_mb": 915.8
+      },
+      "np40": {
+        "recall10": 95.3,
+        "qps": 3780,
+        "memory_mb": 915.8
+      },
+      "np80": {
+        "recall10": 96.5,
+        "qps": 1965,
+        "memory_mb": 915.8
+      },
+      "np160": {
+        "recall10": 96.8,
+        "qps": 1006,
+        "memory_mb": 915.8
+      }
+    }
+  },
+  "ivf_tq": {
+    "np10": {
+      "recall10": 82.5,
+      "qps": 8608,
+      "memory_mb": 610.9
+    },
+    "np20": {
+      "recall10": 86.8,
+      "qps": 4977,
+      "memory_mb": 610.9
+    },
+    "np40": {
+      "recall10": 88.9,
+      "qps": 2574,
+      "memory_mb": 610.9
+    }
+  }
+}

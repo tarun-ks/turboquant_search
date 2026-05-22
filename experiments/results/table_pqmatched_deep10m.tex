@@ -1,0 +1,17 @@
+\begin{table}[t]
+\caption{Bit-matched PQ on Deep-10M: IVF-PQ at $m{=}48$, 10 bits/subspace (480 bits/vec, $\sim$0.94$\times$ IVF-TQ memory). 3 seeds; mean $\pm$ 95\% CI. Memory: IVF-TQ 512 bits/vec, IVF-PQ 480 bits/vec (0.94$\times$ IVF-TQ).}
+\label{tab:streaming_deep10m_pqmatched}
+\centering\small
+\begin{tabular}{llcccc}
+\toprule
+Dataset & Index & Bits/vec & R@10 (1M) & R@10 (10M) & Change $\Delta$ \\
+\midrule
+  Deep-10M (PQ $m{=}48$, 10-bit) & IVF-TQ & 512 & 87.39 $\pm$ 0.33 & 86.59 $\pm$ 0.17 & $-0.80 \pm 0.25$ pp, $p=0.005$ \\
+  Deep-10M (PQ $m{=}48$, 10-bit) & IVF-PQ stale & 480 & 87.21 $\pm$ 0.28 & 86.37 $\pm$ 0.21 & $-0.84 \pm 0.26$ pp, $p=0.005$ \\
+  Deep-10M (PQ $m{=}48$, 10-bit) & IVF-PQ retrain & 480 & 87.21 $\pm$ 0.28 & 86.41 $\pm$ 0.23 & $-0.80 \pm 0.38$ pp, $p=0.012$ \\
+\midrule
+\multicolumn{6}{l}{\textit{IVF-TQ vs.\ IVF-PQ stale at 10M: $+0.22 \pm 0.05$ pp, $p=0.003$}} \\
+\multicolumn{6}{l}{\textit{IVF-PQ stale vs.\ retrain at 10M: $-0.04 \pm 0.43$ pp, $p=0.737$}} \\
+\bottomrule
+\end{tabular}
+\end{table}

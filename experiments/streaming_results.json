@@ -1,0 +1,68 @@
+{
+  "config": {
+    "n_initial": 200000,
+    "batch_size": 100000,
+    "n_batches": 8,
+    "nlist": 500,
+    "nprobe": 10,
+    "bits": 4,
+    "m_pq": 64,
+    "dim": 128
+  },
+  "steps": [
+    {
+      "step": "Initial (200K)",
+      "n_indexed": 200000,
+      "ivf_tq_recall": 0.8963,
+      "ivf_pq_recall": 0.7363
+    },
+    {
+      "step": "After batch 1 (300K total)",
+      "n_indexed": 300000,
+      "ivf_tq_recall": 0.9019,
+      "ivf_pq_recall": 0.7248
+    },
+    {
+      "step": "After batch 2 (400K total)",
+      "n_indexed": 400000,
+      "ivf_tq_recall": 0.908,
+      "ivf_pq_recall": 0.7205
+    },
+    {
+      "step": "After batch 3 (500K total)",
+      "n_indexed": 500000,
+      "ivf_tq_recall": 0.912,
+      "ivf_pq_recall": 0.7124
+    },
+    {
+      "step": "After batch 4 (600K total)",
+      "n_indexed": 600000,
+      "ivf_tq_recall": 0.9144,
+      "ivf_pq_recall": 0.7078
+    },
+    {
+      "step": "After batch 5 (700K total)",
+      "n_indexed": 700000,
+      "ivf_tq_recall": 0.9161,
+      "ivf_pq_recall": 0.703
+    },
+    {
+      "step": "After batch 6 (800K total)",
+      "n_indexed": 800000,
+      "ivf_tq_recall": 0.9181,
+      "ivf_pq_recall": 0.6991
+    },
+    {
+      "step": "After batch 7 (900K total)",
+      "n_indexed": 900000,
+      "ivf_tq_recall": 0.9197,
+      "ivf_pq_recall": 0.6957
+    },
+    {
+      "step": "After batch 8 (1000K total)",
+      "n_indexed": 1000000,
+      "ivf_tq_recall": 0.9212,
+      "ivf_pq_recall": 0.6937
+    }
+  ]
+}

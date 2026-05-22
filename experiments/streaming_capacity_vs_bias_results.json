@@ -1,0 +1,38 @@
+{
+  "dataset": "SIFT-1M",
+  "n_total": 1000000,
+  "n_train_small": 200000,
+  "n_queries": 1000,
+  "nlist": 1000,
+  "nprobe": 20,
+  "m_pq": 64,
+  "results": [
+    {
+      "variant": "A_initial_200K",
+      "n_train": 200000,
+      "recall10": 71.56,
+      "train_s": 2.19,
+      "add_s": 3.65,
+      "qps": 26170.0
+    },
+    {
+      "variant": "B_random_200K",
+      "n_train": 200000,
+      "recall10": 71.31,
+      "train_s": 2.22,
+      "add_s": 3.58,
+      "qps": 27435.0
+    },
+    {
+      "variant": "C_full_1M",
+      "n_train": 1000000,
+      "recall10": 71.16,
+      "train_s": 2.55,
+      "add_s": 3.47,
+      "qps": 29109.0
+    }
+  ],
+  "bias_gap": -0.25,
+  "capacity_gap": -0.15,
+  "verdict": "bias-dominated (paper's claim holds)"
+}

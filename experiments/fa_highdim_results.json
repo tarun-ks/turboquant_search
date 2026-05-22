@@ -1,0 +1,56 @@
+{
+  "config": {
+    "dim": 768,
+    "n": 1000000,
+    "nlist": 1000,
+    "nprobe": 20,
+    "n_clusters": 10000,
+    "noise_std": 0.05
+  },
+  "results": {
+    "uniform_2bit": {
+      "memory_mb": 281.4,
+      "popular_recall10": 13.2,
+      "rare_recall10": 19.49,
+      "weighted_80_20": 14.46
+    },
+    "uniform_4bit": {
+      "memory_mb": 464.5,
+      "popular_recall10": 14.4,
+      "rare_recall10": 21.27,
+      "weighted_80_20": 15.77
+    },
+    "uniform_6bit": {
+      "memory_mb": 647.6,
+      "popular_recall10": 14.4,
+      "rare_recall10": 21.72,
+      "weighted_80_20": 15.86
+    },
+    "fa_ivf_tq_discovered": {
+      "memory_mb": 379.7,
+      "avg_bits_per_coord": 3.01,
+      "popular_recall10": 13.6,
+      "rare_recall10": 20.43,
+      "weighted_80_20": 14.97,
+      "hot_count": 5000,
+      "cold_count": 500000,
+      "memory_breakdown": {
+        "2": {
+          "n_vectors": 500000,
+          "memory_bytes": 149072000,
+          "memory_mb": 142.1661376953125
+        },
+        "4": {
+          "n_vectors": 495000,
+          "memory_bytes": 242652000,
+          "memory_mb": 231.41098022460938
+        },
+        "6": {
+          "n_vectors": 5000,
+          "memory_bytes": 6452000,
+          "memory_mb": 6.153106689453125
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "scann_sift1m": {
+    "leaves20": {
+      "recall10": 88.4,
+      "qps": 6905,
+      "latency_ms": 1448.2,
+      "memory_mb": 62.1,
+      "total_memory_mb": 550.4,
+      "compression": "7.9x",
+      "training": "Anisotropic AH codebook + tree partition"
+    },
+    "leaves50": {
+      "recall10": 96.2,
+      "qps": 5950,
+      "latency_ms": 1680.5,
+      "memory_mb": 62.1,
+      "total_memory_mb": 550.4,
+      "compression": "7.9x",
+      "training": "Anisotropic AH codebook + tree partition"
+    },
+    "leaves100": {
+      "recall10": 98.6,
+      "qps": 3239,
+      "latency_ms": 3087.0,
+      "memory_mb": 62.1,
+      "total_memory_mb": 550.4,
+      "compression": "7.9x",
+      "training": "Anisotropic AH codebook + tree partition"
+    },
+    "leaves200": {
+      "recall10": 99.3,
+      "qps": 2076,
+      "latency_ms": 4816.7,
+      "memory_mb": 62.1,
+      "total_memory_mb": 550.4,
+      "compression": "7.9x",
+      "training": "Anisotropic AH codebook + tree partition"
+    },
+    "leaves400": {
+      "recall10": 99.4,
+      "qps": 1154,
+      "latency_ms": 8662.3,
+      "memory_mb": 62.1,
+      "total_memory_mb": 550.4,
+      "compression": "7.9x",
+      "training": "Anisotropic AH codebook + tree partition"
+    }
+  },
+  "scann_deep1m": {
+    "leaves20": {
+      "recall10": 91.1,
+      "qps": 8861,
+      "latency_ms": 1128.5,
+      "memory_mb": 46.6,
+      "total_memory_mb": 412.8,
+      "compression": "7.9x",
+      "training": "Anisotropic AH codebook + tree partition"
+    },
+    "leaves50": {
+      "recall10": 96.9,
+      "qps": 7564,
+      "latency_ms": 1322.0,
+      "memory_mb": 46.6,
+      "total_memory_mb": 412.8,
+      "compression": "7.9x",
+      "training": "Anisotropic AH codebook + tree partition"
+    },
+    "leaves100": {
+      "recall10": 98.8,
+      "qps": 4809,
+      "latency_ms": 2079.5,
+      "memory_mb": 46.6,
+      "total_memory_mb": 412.8,
+      "compression": "7.9x",
+      "training": "Anisotropic AH codebook + tree partition"
+    },
+    "leaves200": {
+      "recall10": 99.5,
+      "qps": 2787,
+      "latency_ms": 3588.0,
+      "memory_mb": 46.6,
+      "total_memory_mb": 412.8,
+      "compression": "7.9x",
+      "training": "Anisotropic AH codebook + tree partition"
+    },
+    "leaves400": {
+      "recall10": 99.7,
+      "qps": 1457,
+      "latency_ms": 6865.6,
+      "memory_mb": 46.6,
+      "total_memory_mb": 412.8,
+      "compression": "7.9x",
+      "training": "Anisotropic AH codebook + tree partition"
+    }
+  }
+}

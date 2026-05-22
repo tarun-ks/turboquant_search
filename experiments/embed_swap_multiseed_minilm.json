@@ -1,0 +1,391 @@
+{
+  "config": {
+    "swap": "minilm",
+    "model_old": "sentence-transformers/all-MiniLM-L6-v2",
+    "model_new": "sentence-transformers/all-MiniLM-L12-v2",
+    "n_init": 200000,
+    "n_new": 800000,
+    "n_new_budget": 800000,
+    "batch": 100000,
+    "n_queries": 5000,
+    "nlist": 500,
+    "nprobe": 20,
+    "cos_old_new": 0.5113670825958252,
+    "seeds": [
+      42,
+      123,
+      7777
+    ],
+    "device": "mps"
+  },
+  "per_seed": {
+    "42": [
+      {
+        "step": "Initial (200K, old-enc)",
+        "n_indexed": 200000,
+        "ivf_tq": 91.73,
+        "ivf_pq_stale": 74.11,
+        "ivf_pq_retrain": 74.03,
+        "retrain_time_cumulative_s": 0.0
+      },
+      {
+        "step": "+100K new-enc",
+        "n_indexed": 300000,
+        "ivf_tq": 86.4,
+        "ivf_pq_stale": 72.85,
+        "ivf_pq_retrain": 75.2,
+        "retrain_time_cumulative_s": 25.3
+      },
+      {
+        "step": "+200K new-enc",
+        "n_indexed": 400000,
+        "ivf_tq": 87.19,
+        "ivf_pq_stale": 72.87,
+        "ivf_pq_retrain": 75.28,
+        "retrain_time_cumulative_s": 56.4
+      },
+      {
+        "step": "+300K new-enc",
+        "n_indexed": 500000,
+        "ivf_tq": 87.58,
+        "ivf_pq_stale": 72.75,
+        "ivf_pq_retrain": 75.59,
+        "retrain_time_cumulative_s": 92.2
+      },
+      {
+        "step": "+400K new-enc",
+        "n_indexed": 600000,
+        "ivf_tq": 88.05,
+        "ivf_pq_stale": 72.63,
+        "ivf_pq_retrain": 75.74,
+        "retrain_time_cumulative_s": 133.8
+      },
+      {
+        "step": "+500K new-enc",
+        "n_indexed": 700000,
+        "ivf_tq": 88.33,
+        "ivf_pq_stale": 72.49,
+        "ivf_pq_retrain": 75.77,
+        "retrain_time_cumulative_s": 180.0
+      },
+      {
+        "step": "+600K new-enc",
+        "n_indexed": 800000,
+        "ivf_tq": 88.6,
+        "ivf_pq_stale": 72.51,
+        "ivf_pq_retrain": 75.75,
+        "retrain_time_cumulative_s": 232.4
+      },
+      {
+        "step": "+700K new-enc",
+        "n_indexed": 900000,
+        "ivf_tq": 88.77,
+        "ivf_pq_stale": 72.37,
+        "ivf_pq_retrain": 75.65,
+        "retrain_time_cumulative_s": 292.1
+      },
+      {
+        "step": "+800K new-enc",
+        "n_indexed": 1000000,
+        "ivf_tq": 88.97,
+        "ivf_pq_stale": 72.38,
+        "ivf_pq_retrain": 75.36,
+        "retrain_time_cumulative_s": 357.4
+      }
+    ],
+    "123": [
+      {
+        "step": "Initial (200K, old-enc)",
+        "n_indexed": 200000,
+        "ivf_tq": 91.65,
+        "ivf_pq_stale": 73.93,
+        "ivf_pq_retrain": 73.94,
+        "retrain_time_cumulative_s": 0.0
+      },
+      {
+        "step": "+100K new-enc",
+        "n_indexed": 300000,
+        "ivf_tq": 86.1,
+        "ivf_pq_stale": 72.61,
+        "ivf_pq_retrain": 74.92,
+        "retrain_time_cumulative_s": 25.8
+      },
+      {
+        "step": "+200K new-enc",
+        "n_indexed": 400000,
+        "ivf_tq": 86.97,
+        "ivf_pq_stale": 72.55,
+        "ivf_pq_retrain": 75.5,
+        "retrain_time_cumulative_s": 57.3
+      },
+      {
+        "step": "+300K new-enc",
+        "n_indexed": 500000,
+        "ivf_tq": 87.38,
+        "ivf_pq_stale": 72.63,
+        "ivf_pq_retrain": 75.69,
+        "retrain_time_cumulative_s": 94.4
+      },
+      {
+        "step": "+400K new-enc",
+        "n_indexed": 600000,
+        "ivf_tq": 87.76,
+        "ivf_pq_stale": 72.59,
+        "ivf_pq_retrain": 75.86,
+        "retrain_time_cumulative_s": 138.2
+      },
+      {
+        "step": "+500K new-enc",
+        "n_indexed": 700000,
+        "ivf_tq": 87.98,
+        "ivf_pq_stale": 72.59,
+        "ivf_pq_retrain": 75.51,
+        "retrain_time_cumulative_s": 186.6
+      },
+      {
+        "step": "+600K new-enc",
+        "n_indexed": 800000,
+        "ivf_tq": 88.37,
+        "ivf_pq_stale": 72.58,
+        "ivf_pq_retrain": 75.65,
+        "retrain_time_cumulative_s": 240.9
+      },
+      {
+        "step": "+700K new-enc",
+        "n_indexed": 900000,
+        "ivf_tq": 88.61,
+        "ivf_pq_stale": 72.46,
+        "ivf_pq_retrain": 75.76,
+        "retrain_time_cumulative_s": 300.6
+      },
+      {
+        "step": "+800K new-enc",
+        "n_indexed": 1000000,
+        "ivf_tq": 88.77,
+        "ivf_pq_stale": 72.32,
+        "ivf_pq_retrain": 75.59,
+        "retrain_time_cumulative_s": 366.7
+      }
+    ],
+    "7777": [
+      {
+        "step": "Initial (200K, old-enc)",
+        "n_indexed": 200000,
+        "ivf_tq": 91.89,
+        "ivf_pq_stale": 73.8,
+        "ivf_pq_retrain": 73.98,
+        "retrain_time_cumulative_s": 0.0
+      },
+      {
+        "step": "+100K new-enc",
+        "n_indexed": 300000,
+        "ivf_tq": 86.25,
+        "ivf_pq_stale": 72.45,
+        "ivf_pq_retrain": 75.2,
+        "retrain_time_cumulative_s": 25.0
+      },
+      {
+        "step": "+200K new-enc",
+        "n_indexed": 400000,
+        "ivf_tq": 87.28,
+        "ivf_pq_stale": 72.56,
+        "ivf_pq_retrain": 75.55,
+        "retrain_time_cumulative_s": 55.1
+      },
+      {
+        "step": "+300K new-enc",
+        "n_indexed": 500000,
+        "ivf_tq": 87.62,
+        "ivf_pq_stale": 72.61,
+        "ivf_pq_retrain": 75.59,
+        "retrain_time_cumulative_s": 91.7
+      },
+      {
+        "step": "+400K new-enc",
+        "n_indexed": 600000,
+        "ivf_tq": 87.92,
+        "ivf_pq_stale": 72.22,
+        "ivf_pq_retrain": 75.44,
+        "retrain_time_cumulative_s": 132.6
+      },
+      {
+        "step": "+500K new-enc",
+        "n_indexed": 700000,
+        "ivf_tq": 88.18,
+        "ivf_pq_stale": 72.2,
+        "ivf_pq_retrain": 75.61,
+        "retrain_time_cumulative_s": 179.1
+      },
+      {
+        "step": "+600K new-enc",
+        "n_indexed": 800000,
+        "ivf_tq": 88.36,
+        "ivf_pq_stale": 72.2,
+        "ivf_pq_retrain": 75.72,
+        "retrain_time_cumulative_s": 230.8
+      },
+      {
+        "step": "+700K new-enc",
+        "n_indexed": 900000,
+        "ivf_tq": 88.58,
+        "ivf_pq_stale": 72.18,
+        "ivf_pq_retrain": 75.75,
+        "retrain_time_cumulative_s": 287.2
+      },
+      {
+        "step": "+800K new-enc",
+        "n_indexed": 1000000,
+        "ivf_tq": 88.74,
+        "ivf_pq_stale": 72.23,
+        "ivf_pq_retrain": 75.73,
+        "retrain_time_cumulative_s": 349.8
+      }
+    ]
+  },
+  "aggregated": [
+    {
+      "step": "Initial (200K, old-enc)",
+      "n_indexed": 200000,
+      "ivf_tq": 91.757,
+      "ivf_tq_ci95": 0.304,
+      "ivf_pq_stale": 73.947,
+      "ivf_pq_stale_ci95": 0.387,
+      "ivf_pq_retrain": 73.983,
+      "ivf_pq_retrain_ci95": 0.112,
+      "retrain_time_cumulative_s": 0.0,
+      "retrain_time_cumulative_s_ci95": 0.0,
+      "paired_tq_minus_retrain": 17.773,
+      "paired_ci95": 0.294,
+      "paired_t_stat": 259.866,
+      "paired_p": 0.0
+    },
+    {
+      "step": "+100K new-enc",
+      "n_indexed": 300000,
+      "ivf_tq": 86.25,
+      "ivf_tq_ci95": 0.373,
+      "ivf_pq_stale": 72.637,
+      "ivf_pq_stale_ci95": 0.5,
+      "ivf_pq_retrain": 75.107,
+      "ivf_pq_retrain_ci95": 0.402,
+      "retrain_time_cumulative_s": 25.367,
+      "retrain_time_cumulative_s_ci95": 1.004,
+      "paired_tq_minus_retrain": 11.143,
+      "paired_ci95": 0.202,
+      "paired_t_stat": 236.979,
+      "paired_p": 0.0
+    },
+    {
+      "step": "+200K new-enc",
+      "n_indexed": 400000,
+      "ivf_tq": 87.147,
+      "ivf_tq_ci95": 0.396,
+      "ivf_pq_stale": 72.66,
+      "ivf_pq_stale_ci95": 0.452,
+      "ivf_pq_retrain": 75.443,
+      "ivf_pq_retrain_ci95": 0.357,
+      "retrain_time_cumulative_s": 56.267,
+      "retrain_time_cumulative_s_ci95": 2.748,
+      "paired_tq_minus_retrain": 11.703,
+      "paired_ci95": 0.55,
+      "paired_t_stat": 91.636,
+      "paired_p": 0.0001
+    },
+    {
+      "step": "+300K new-enc",
+      "n_indexed": 500000,
+      "ivf_tq": 87.527,
+      "ivf_tq_ci95": 0.319,
+      "ivf_pq_stale": 72.663,
+      "ivf_pq_stale_ci95": 0.188,
+      "ivf_pq_retrain": 75.623,
+      "ivf_pq_retrain_ci95": 0.143,
+      "retrain_time_cumulative_s": 92.767,
+      "retrain_time_cumulative_s_ci95": 3.569,
+      "paired_tq_minus_retrain": 11.903,
+      "paired_ci95": 0.462,
+      "paired_t_stat": 110.946,
+      "paired_p": 0.0001
+    },
+    {
+      "step": "+400K new-enc",
+      "n_indexed": 600000,
+      "ivf_tq": 87.91,
+      "ivf_tq_ci95": 0.361,
+      "ivf_pq_stale": 72.48,
+      "ivf_pq_stale_ci95": 0.562,
+      "ivf_pq_retrain": 75.68,
+      "ivf_pq_retrain_ci95": 0.537,
+      "retrain_time_cumulative_s": 134.867,
+      "retrain_time_cumulative_s_ci95": 7.325,
+      "paired_tq_minus_retrain": 12.23,
+      "paired_ci95": 0.741,
+      "paired_t_stat": 71.045,
+      "paired_p": 0.0002
+    },
+    {
+      "step": "+500K new-enc",
+      "n_indexed": 700000,
+      "ivf_tq": 88.163,
+      "ivf_tq_ci95": 0.436,
+      "ivf_pq_stale": 72.427,
+      "ivf_pq_stale_ci95": 0.503,
+      "ivf_pq_retrain": 75.63,
+      "ivf_pq_retrain_ci95": 0.326,
+      "retrain_time_cumulative_s": 181.9,
+      "retrain_time_cumulative_s_ci95": 10.174,
+      "paired_tq_minus_retrain": 12.533,
+      "paired_ci95": 0.137,
+      "paired_t_stat": 394.155,
+      "paired_p": 0.0
+    },
+    {
+      "step": "+600K new-enc",
+      "n_indexed": 800000,
+      "ivf_tq": 88.443,
+      "ivf_tq_ci95": 0.337,
+      "ivf_pq_stale": 72.43,
+      "ivf_pq_stale_ci95": 0.502,
+      "ivf_pq_retrain": 75.707,
+      "ivf_pq_retrain_ci95": 0.127,
+      "retrain_time_cumulative_s": 234.7,
+      "retrain_time_cumulative_s_ci95": 13.487,
+      "paired_tq_minus_retrain": 12.737,
+      "paired_ci95": 0.263,
+      "paired_t_stat": 208.143,
+      "paired_p": 0.0
+    },
+    {
+      "step": "+700K new-enc",
+      "n_indexed": 900000,
+      "ivf_tq": 88.653,
+      "ivf_tq_ci95": 0.254,
+      "ivf_pq_stale": 72.337,
+      "ivf_pq_stale_ci95": 0.355,
+      "ivf_pq_retrain": 75.72,
+      "ivf_pq_retrain_ci95": 0.151,
+      "retrain_time_cumulative_s": 293.3,
+      "retrain_time_cumulative_s_ci95": 16.844,
+      "paired_tq_minus_retrain": 12.933,
+      "paired_ci95": 0.402,
+      "paired_t_stat": 138.307,
+      "paired_p": 0.0001
+    },
+    {
+      "step": "+800K new-enc",
+      "n_indexed": 1000000,
+      "ivf_tq": 88.827,
+      "ivf_tq_ci95": 0.311,
+      "ivf_pq_stale": 72.31,
+      "ivf_pq_stale_ci95": 0.188,
+      "ivf_pq_retrain": 75.56,
+      "ivf_pq_retrain_ci95": 0.464,
+      "retrain_time_cumulative_s": 357.967,
+      "retrain_time_cumulative_s_ci95": 21.028,
+      "paired_tq_minus_retrain": 13.267,
+      "paired_ci95": 0.768,
+      "paired_t_stat": 74.305,
+      "paired_p": 0.0002
+    }
+  ]
+}

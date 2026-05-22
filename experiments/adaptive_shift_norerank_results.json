@@ -1,0 +1,101 @@
+{
+  "steps": [
+    {
+      "step": "Initial 200K",
+      "n_indexed": 200000,
+      "ivf_tq_frozen": 66.36,
+      "ivf_tq_adapt": 65.29,
+      "ivf_pq_stale": 68.0,
+      "ivf_pq_retrain": 68.0,
+      "pq_retrain_time_cum_s": 0.0,
+      "tq_refresh_time_cum_s": 5.11
+    },
+    {
+      "step": "+100K B",
+      "n_indexed": 300000,
+      "ivf_tq_frozen": 64.28,
+      "ivf_tq_adapt": 91.9,
+      "ivf_pq_stale": 63.02,
+      "ivf_pq_retrain": 96.27,
+      "pq_retrain_time_cum_s": 3.06,
+      "tq_refresh_time_cum_s": 9.51
+    },
+    {
+      "step": "+200K B",
+      "n_indexed": 400000,
+      "ivf_tq_frozen": 65.33,
+      "ivf_tq_adapt": 91.4,
+      "ivf_pq_stale": 63.68,
+      "ivf_pq_retrain": 96.05,
+      "pq_retrain_time_cum_s": 6.44,
+      "tq_refresh_time_cum_s": 14.32
+    },
+    {
+      "step": "+300K B",
+      "n_indexed": 500000,
+      "ivf_tq_frozen": 65.89,
+      "ivf_tq_adapt": 91.13,
+      "ivf_pq_stale": 64.08,
+      "ivf_pq_retrain": 96.12,
+      "pq_retrain_time_cum_s": 10.36,
+      "tq_refresh_time_cum_s": 19.42
+    },
+    {
+      "step": "+400K B",
+      "n_indexed": 600000,
+      "ivf_tq_frozen": 66.41,
+      "ivf_tq_adapt": 90.87,
+      "ivf_pq_stale": 64.17,
+      "ivf_pq_retrain": 96.06,
+      "pq_retrain_time_cum_s": 14.68,
+      "tq_refresh_time_cum_s": 24.79
+    },
+    {
+      "step": "+500K B",
+      "n_indexed": 700000,
+      "ivf_tq_frozen": 66.63,
+      "ivf_tq_adapt": 90.62,
+      "ivf_pq_stale": 64.18,
+      "ivf_pq_retrain": 96.02,
+      "pq_retrain_time_cum_s": 19.57,
+      "tq_refresh_time_cum_s": 30.38
+    },
+    {
+      "step": "+600K B",
+      "n_indexed": 800000,
+      "ivf_tq_frozen": 66.68,
+      "ivf_tq_adapt": 90.44,
+      "ivf_pq_stale": 64.27,
+      "ivf_pq_retrain": 95.93,
+      "pq_retrain_time_cum_s": 24.89,
+      "tq_refresh_time_cum_s": 36.14
+    },
+    {
+      "step": "+700K B",
+      "n_indexed": 900000,
+      "ivf_tq_frozen": 67.01,
+      "ivf_tq_adapt": 90.35,
+      "ivf_pq_stale": 64.31,
+      "ivf_pq_retrain": 95.91,
+      "pq_retrain_time_cum_s": 30.47,
+      "tq_refresh_time_cum_s": 42.62
+    },
+    {
+      "step": "+800K B",
+      "n_indexed": 1000000,
+      "ivf_tq_frozen": 66.99,
+      "ivf_tq_adapt": 90.3,
+      "ivf_pq_stale": 64.41,
+      "ivf_pq_retrain": 95.78,
+      "pq_retrain_time_cum_s": 37.4,
+      "tq_refresh_time_cum_s": 50.68
+    }
+  ],
+  "config": {
+    "rerank": 0,
+    "nlist": 500,
+    "nprobe": 20,
+    "m_pq": 96,
+    "bits": 4
+  }
+}

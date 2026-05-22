@@ -1,0 +1,93 @@
+{
+  "steps": [
+    {
+      "step": "Initial (1M)",
+      "n_indexed": 1000000,
+      "ivf_tq": 87.54,
+      "ivf_pq_stale": 82.16,
+      "ivf_pq_retrain": 82.16,
+      "retrain_time_cumulative_s": 0.0
+    },
+    {
+      "step": "Batch 1 (2M)",
+      "n_indexed": 2000000,
+      "ivf_tq": 87.31,
+      "ivf_pq_stale": 81.18,
+      "ivf_pq_retrain": 81.11,
+      "retrain_time_cumulative_s": 19.3
+    },
+    {
+      "step": "Batch 2 (3M)",
+      "n_indexed": 3000000,
+      "ivf_tq": 87.24,
+      "ivf_pq_stale": 80.7,
+      "ivf_pq_retrain": 80.67,
+      "retrain_time_cumulative_s": 42.7
+    },
+    {
+      "step": "Batch 3 (4M)",
+      "n_indexed": 4000000,
+      "ivf_tq": 86.96,
+      "ivf_pq_stale": 80.32,
+      "ivf_pq_retrain": 80.29,
+      "retrain_time_cumulative_s": 69.6
+    },
+    {
+      "step": "Batch 4 (5M)",
+      "n_indexed": 5000000,
+      "ivf_tq": 86.89,
+      "ivf_pq_stale": 79.87,
+      "ivf_pq_retrain": 80.01,
+      "retrain_time_cumulative_s": 100.4
+    },
+    {
+      "step": "Batch 5 (6M)",
+      "n_indexed": 6000000,
+      "ivf_tq": 86.84,
+      "ivf_pq_stale": 79.61,
+      "ivf_pq_retrain": 79.81,
+      "retrain_time_cumulative_s": 134.7
+    },
+    {
+      "step": "Batch 6 (7M)",
+      "n_indexed": 7000000,
+      "ivf_tq": 86.7,
+      "ivf_pq_stale": 79.32,
+      "ivf_pq_retrain": 79.6,
+      "retrain_time_cumulative_s": 172.6
+    },
+    {
+      "step": "Batch 7 (8M)",
+      "n_indexed": 8000000,
+      "ivf_tq": 86.74,
+      "ivf_pq_stale": 79.2,
+      "ivf_pq_retrain": 79.15,
+      "retrain_time_cumulative_s": 213.9
+    },
+    {
+      "step": "Batch 8 (9M)",
+      "n_indexed": 9000000,
+      "ivf_tq": 86.71,
+      "ivf_pq_stale": 79.04,
+      "ivf_pq_retrain": 79.1,
+      "retrain_time_cumulative_s": 259.5
+    },
+    {
+      "step": "Batch 9 (9M)",
+      "n_indexed": 9990000,
+      "ivf_tq": 86.65,
+      "ivf_pq_stale": 78.79,
+      "ivf_pq_retrain": 78.94,
+      "retrain_time_cumulative_s": 309.3
+    }
+  ],
+  "config": {
+    "dataset": "Deep-10M",
+    "n_initial": 1000000,
+    "batch_size": 1000000,
+    "n_batches": 9,
+    "nlist": 3162,
+    "nprobe": 20,
+    "m_pq": 48
+  }
+}

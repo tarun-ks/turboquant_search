@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=64", "wheel", "pybind11>=2.11.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "turboquant-search"
+version = "0.2.0"
+description = "IVF index with a codebook-free residual layer (rotation + Lloyd-Max + sign-bit). Streaming-robust, no codebook re-training. Inspired by TurboQuant (Zandieh et al., arXiv 2025)."
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.9"
+authors = [{name = "Tarun", email = "tarun@turboquant.dev"}]
+keywords = [
+    "vector-search",
+    "quantization",
+    "compression",
+    "embeddings",
+    "similarity-search",
+    "nearest-neighbor",
+    "rag",
+    "turboQuant",
+    "faiss",
+    "ann",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Typing :: Typed",
+]
+dependencies = [
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "scikit-learn>=1.2.0",
+    "click>=8.0.0",
+    "tqdm>=4.60.0",
+    "requests>=2.28.0",
+]
+
+[project.optional-dependencies]
+native = ["pybind11>=2.11.0"]
+faiss = ["faiss-cpu>=1.7.0"]
+all = [
+    "faiss-cpu>=1.7.0",
+    "datasets>=2.0.0",
+    "pybind11>=2.11.0",
+    "matplotlib>=3.7.0",
+]
+
+[project.scripts]
+tqs = "turboquant_search.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/tarun-ks/turboquant_search"
+Repository = "https://github.com/tarun-ks/turboquant_search"
+Documentation = "https://github.com/tarun-ks/turboquant_search#readme"
+Issues = "https://github.com/tarun-ks/turboquant_search/issues"
+Changelog = "https://github.com/tarun-ks/turboquant_search/blob/main/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+include = ["turboquant_search*"]

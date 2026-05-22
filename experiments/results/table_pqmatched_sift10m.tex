@@ -1,0 +1,17 @@
+\begin{table}[t]
+\caption{Bit-matched PQ on SIFT-10M: IVF-PQ at $m{=}64$, 10 bits/subspace (640 bits/vec, $\sim$0.95$\times$ IVF-TQ memory). 3 seeds; mean $\pm$ 95\% CI. Memory: IVF-TQ 672 bits/vec, IVF-PQ 640 bits/vec (0.95$\times$ IVF-TQ).}
+\label{tab:streaming_sift10m_pqmatched}
+\centering\small
+\begin{tabular}{llcccc}
+\toprule
+Dataset & Index & Bits/vec & R@10 (1M) & R@10 (10M) & Change $\Delta$ \\
+\midrule
+  SIFT-10M (PQ $m{=}64$, 10-bit) & IVF-TQ & 672 & 83.91 $\pm$ 0.08 & 84.47 $\pm$ 0.28 & $+0.56 \pm 0.21$ pp, $p=0.007$ \\
+  SIFT-10M (PQ $m{=}64$, 10-bit) & IVF-PQ stale & 640 & 80.00 $\pm$ 0.44 & 77.69 $\pm$ 0.04 & $-2.31 \pm 0.42$ pp, $p=0.002$ \\
+  SIFT-10M (PQ $m{=}64$, 10-bit) & IVF-PQ retrain & 640 & 80.00 $\pm$ 0.44 & 77.61 $\pm$ 0.12 & $-2.40 \pm 0.38$ pp, $p=0.001$ \\
+\midrule
+\multicolumn{6}{l}{\textit{IVF-TQ vs.\ IVF-PQ stale at 10M: $+6.79 \pm 0.25$ pp, $p<0.001$}} \\
+\multicolumn{6}{l}{\textit{IVF-PQ stale vs.\ retrain at 10M: $+0.08 \pm 0.07$ pp, $p=0.040$}} \\
+\bottomrule
+\end{tabular}
+\end{table}

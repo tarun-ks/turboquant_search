@@ -1,0 +1,121 @@
+{
+  "config": {
+    "dataset": "Deep-1M (rotated to simulate encoder swap)",
+    "n_init": 200000,
+    "n_new": 800000,
+    "batch": 100000,
+    "nlist": 500,
+    "nprobe": 20,
+    "m_pq": 96,
+    "bits": 4,
+    "n_queries": 5000,
+    "dim": 96,
+    "cos_old_new_sample": -0.058381661772727966
+  },
+  "steps": [
+    {
+      "step": "Initial 200K (A)",
+      "n_indexed": 200000,
+      "ivf_tq_frozen": 68.13,
+      "ivf_tq_adapt": 66.89,
+      "ivf_pq_stale": 68.0,
+      "ivf_pq_retrain": 68.0,
+      "pq_retrain_time_cum_s": 0.0,
+      "tq_refresh_time_cum_s": 5.06,
+      "tq_refresh_count": 1
+    },
+    {
+      "step": "+100K B",
+      "n_indexed": 300000,
+      "ivf_tq_frozen": 68.4,
+      "ivf_tq_adapt": 97.64,
+      "ivf_pq_stale": 63.02,
+      "ivf_pq_retrain": 96.27,
+      "pq_retrain_time_cum_s": 3.13,
+      "tq_refresh_time_cum_s": 9.84,
+      "tq_refresh_count": 2
+    },
+    {
+      "step": "+200K B",
+      "n_indexed": 400000,
+      "ivf_tq_frozen": 70.66,
+      "ivf_tq_adapt": 97.66,
+      "ivf_pq_stale": 63.68,
+      "ivf_pq_retrain": 96.05,
+      "pq_retrain_time_cum_s": 6.8,
+      "tq_refresh_time_cum_s": 14.73,
+      "tq_refresh_count": 3
+    },
+    {
+      "step": "+300K B",
+      "n_indexed": 500000,
+      "ivf_tq_frozen": 72.0,
+      "ivf_tq_adapt": 97.73,
+      "ivf_pq_stale": 64.08,
+      "ivf_pq_retrain": 96.12,
+      "pq_retrain_time_cum_s": 10.84,
+      "tq_refresh_time_cum_s": 20.1,
+      "tq_refresh_count": 4
+    },
+    {
+      "step": "+400K B",
+      "n_indexed": 600000,
+      "ivf_tq_frozen": 73.01,
+      "ivf_tq_adapt": 97.6,
+      "ivf_pq_stale": 64.17,
+      "ivf_pq_retrain": 96.06,
+      "pq_retrain_time_cum_s": 15.12,
+      "tq_refresh_time_cum_s": 26.22,
+      "tq_refresh_count": 5
+    },
+    {
+      "step": "+500K B",
+      "n_indexed": 700000,
+      "ivf_tq_frozen": 73.51,
+      "ivf_tq_adapt": 97.54,
+      "ivf_pq_stale": 64.18,
+      "ivf_pq_retrain": 96.02,
+      "pq_retrain_time_cum_s": 19.99,
+      "tq_refresh_time_cum_s": 32.65,
+      "tq_refresh_count": 6
+    },
+    {
+      "step": "+600K B",
+      "n_indexed": 800000,
+      "ivf_tq_frozen": 74.06,
+      "ivf_tq_adapt": 97.71,
+      "ivf_pq_stale": 64.27,
+      "ivf_pq_retrain": 95.93,
+      "pq_retrain_time_cum_s": 25.19,
+      "tq_refresh_time_cum_s": 39.4,
+      "tq_refresh_count": 7
+    },
+    {
+      "step": "+700K B",
+      "n_indexed": 900000,
+      "ivf_tq_frozen": 74.63,
+      "ivf_tq_adapt": 97.75,
+      "ivf_pq_stale": 64.31,
+      "ivf_pq_retrain": 95.91,
+      "pq_retrain_time_cum_s": 31.59,
+      "tq_refresh_time_cum_s": 46.69,
+      "tq_refresh_count": 8
+    },
+    {
+      "step": "+800K B",
+      "n_indexed": 1000000,
+      "ivf_tq_frozen": 74.83,
+      "ivf_tq_adapt": 97.77,
+      "ivf_pq_stale": 64.41,
+      "ivf_pq_retrain": 95.78,
+      "pq_retrain_time_cum_s": 38.05,
+      "tq_refresh_time_cum_s": 54.01,
+      "tq_refresh_count": 9
+    }
+  ],
+  "final_summary": {
+    "tq_refresh_total_time_s": 54.01002645492554,
+    "tq_refresh_count": 9,
+    "pq_retrain_total_time_s": 38.04673385620117
+  }
+}

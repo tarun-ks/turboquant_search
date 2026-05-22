@@ -1,0 +1,76 @@
+{
+  "steps": [
+    {
+      "step": "Initial (200K)",
+      "n_indexed": 200000,
+      "ivf_tq": 0.8963,
+      "ivf_pq_stale": 0.7363,
+      "ivf_pq_retrain": 0.7363,
+      "total_retrain_time_s": 0.0
+    },
+    {
+      "step": "Batch 1 (300K)",
+      "n_indexed": 300000,
+      "ivf_tq": 0.9019,
+      "ivf_pq_stale": 0.7248,
+      "ivf_pq_retrain": 0.7248,
+      "total_retrain_time_s": 0.0
+    },
+    {
+      "step": "Batch 2 (400K)",
+      "n_indexed": 400000,
+      "ivf_tq": 0.908,
+      "ivf_pq_stale": 0.7205,
+      "ivf_pq_retrain": 0.7202,
+      "total_retrain_time_s": 3.23
+    },
+    {
+      "step": "Batch 3 (500K)",
+      "n_indexed": 500000,
+      "ivf_tq": 0.912,
+      "ivf_pq_stale": 0.7124,
+      "ivf_pq_retrain": 0.7128,
+      "total_retrain_time_s": 3.23
+    },
+    {
+      "step": "Batch 4 (600K)",
+      "n_indexed": 600000,
+      "ivf_tq": 0.9144,
+      "ivf_pq_stale": 0.7078,
+      "ivf_pq_retrain": 0.709,
+      "total_retrain_time_s": 6.82
+    },
+    {
+      "step": "Batch 5 (700K)",
+      "n_indexed": 700000,
+      "ivf_tq": 0.9161,
+      "ivf_pq_stale": 0.703,
+      "ivf_pq_retrain": 0.7047,
+      "total_retrain_time_s": 6.82
+    },
+    {
+      "step": "Batch 6 (800K)",
+      "n_indexed": 800000,
+      "ivf_tq": 0.9181,
+      "ivf_pq_stale": 0.6991,
+      "ivf_pq_retrain": 0.7011,
+      "total_retrain_time_s": 11.17
+    },
+    {
+      "step": "Batch 7 (900K)",
+      "n_indexed": 900000,
+      "ivf_tq": 0.9197,
+      "ivf_pq_stale": 0.6957,
+      "ivf_pq_retrain": 0.698,
+      "total_retrain_time_s": 11.17
+    },
+    {
+      "step": "Batch 8 (1000K)",
+      "n_indexed": 1000000,
+      "ivf_tq": 0.9212,
+      "ivf_pq_stale": 0.6937,
+      "ivf_pq_retrain": 0.6962,
+      "total_retrain_time_s": 16.2
+    }
+  ]
+}

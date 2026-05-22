@@ -1,0 +1,188 @@
+{
+  "m64": {
+    "m": 64,
+    "baseline_recall": 0.7694,
+    "train_s": 80.00499987602234,
+    "add_s": 30.623884916305542,
+    "search_s": 22.270883083343506,
+    "ablations": [
+      {
+        "position": "msb",
+        "frac": 0.05,
+        "recall": 0.203,
+        "delta_pp": -56.64,
+        "elapsed_s": 22.8
+      },
+      {
+        "position": "msb",
+        "frac": 0.1,
+        "recall": 0.1228,
+        "delta_pp": -64.66,
+        "elapsed_s": 22.5
+      },
+      {
+        "position": "msb",
+        "frac": 0.2,
+        "recall": 0.0572,
+        "delta_pp": -71.22,
+        "elapsed_s": 22.7
+      },
+      {
+        "position": "middle",
+        "frac": 0.05,
+        "recall": 0.202,
+        "delta_pp": -56.73999999999999,
+        "elapsed_s": 22.1
+      },
+      {
+        "position": "middle",
+        "frac": 0.1,
+        "recall": 0.1179,
+        "delta_pp": -65.14999999999999,
+        "elapsed_s": 22.2
+      },
+      {
+        "position": "middle",
+        "frac": 0.2,
+        "recall": 0.0566,
+        "delta_pp": -71.28,
+        "elapsed_s": 22.7
+      },
+      {
+        "position": "lsb",
+        "frac": 0.05,
+        "recall": 0.1989,
+        "delta_pp": -57.05,
+        "elapsed_s": 22.8
+      },
+      {
+        "position": "lsb",
+        "frac": 0.1,
+        "recall": 0.1152,
+        "delta_pp": -65.42,
+        "elapsed_s": 22.4
+      },
+      {
+        "position": "lsb",
+        "frac": 0.2,
+        "recall": 0.0582,
+        "delta_pp": -71.11999999999999,
+        "elapsed_s": 22.9
+      },
+      {
+        "position": "random",
+        "frac": 0.05,
+        "recall": 0.1971,
+        "delta_pp": -57.230000000000004,
+        "elapsed_s": 22.6
+      },
+      {
+        "position": "random",
+        "frac": 0.1,
+        "recall": 0.1189,
+        "delta_pp": -65.05,
+        "elapsed_s": 22.3
+      },
+      {
+        "position": "random",
+        "frac": 0.2,
+        "recall": 0.062,
+        "delta_pp": -70.74000000000001,
+        "elapsed_s": 22.6
+      }
+    ]
+  },
+  "m128": {
+    "m": 128,
+    "baseline_recall": 0.9721,
+    "train_s": 123.12399697303772,
+    "add_s": 87.49194598197937,
+    "search_s": 30.868181943893433,
+    "ablations": [
+      {
+        "position": "msb",
+        "frac": 0.05,
+        "recall": 0.1989,
+        "delta_pp": -77.32,
+        "elapsed_s": 31.4
+      },
+      {
+        "position": "msb",
+        "frac": 0.1,
+        "recall": 0.1148,
+        "delta_pp": -85.72999999999999,
+        "elapsed_s": 32.0
+      },
+      {
+        "position": "msb",
+        "frac": 0.2,
+        "recall": 0.0557,
+        "delta_pp": -91.64,
+        "elapsed_s": 32.0
+      },
+      {
+        "position": "middle",
+        "frac": 0.05,
+        "recall": 0.2072,
+        "delta_pp": -76.49,
+        "elapsed_s": 31.4
+      },
+      {
+        "position": "middle",
+        "frac": 0.1,
+        "recall": 0.1197,
+        "delta_pp": -85.24,
+        "elapsed_s": 31.5
+      },
+      {
+        "position": "middle",
+        "frac": 0.2,
+        "recall": 0.0575,
+        "delta_pp": -91.46,
+        "elapsed_s": 31.9
+      },
+      {
+        "position": "lsb",
+        "frac": 0.05,
+        "recall": 0.2012,
+        "delta_pp": -77.08999999999999,
+        "elapsed_s": 31.9
+      },
+      {
+        "position": "lsb",
+        "frac": 0.1,
+        "recall": 0.1175,
+        "delta_pp": -85.46000000000001,
+        "elapsed_s": 32.2
+      },
+      {
+        "position": "lsb",
+        "frac": 0.2,
+        "recall": 0.0533,
+        "delta_pp": -91.88,
+        "elapsed_s": 32.7
+      },
+      {
+        "position": "random",
+        "frac": 0.05,
+        "recall": 0.2032,
+        "delta_pp": -76.88999999999999,
+        "elapsed_s": 31.7
+      },
+      {
+        "position": "random",
+        "frac": 0.1,
+        "recall": 0.1203,
+        "delta_pp": -85.18,
+        "elapsed_s": 32.6
+      },
+      {
+        "position": "random",
+        "frac": 0.2,
+        "recall": 0.0542,
+        "delta_pp": -91.78999999999999,
+        "elapsed_s": 32.3
+      }
+    ]
+  }
+}

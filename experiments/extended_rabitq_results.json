@@ -1,0 +1,212 @@
+[
+  {
+    "dataset": "SIFT-1M",
+    "dim": 128,
+    "nlist": 1000,
+    "nprobe": 20,
+    "n_queries": 1000,
+    "seed": 42,
+    "rows": [
+      {
+        "label": "Extended RaBitQ (proxy, B=4)",
+        "bits_stage1": 4,
+        "bits_stage2": 0,
+        "bits_total": 4,
+        "recall10": 80.14,
+        "qps": 2705.0,
+        "memory_mb": 65.3,
+        "build_s": 29.7
+      },
+      {
+        "label": "IVF-TQ (ours, b=3+sign)",
+        "bits_stage1": 3,
+        "bits_stage2": 1,
+        "bits_total": 4,
+        "recall10": 79.76,
+        "qps": 1612.0,
+        "memory_mb": 65.3,
+        "build_s": 29.0
+      },
+      {
+        "label": "Extended RaBitQ (proxy, B=5)",
+        "bits_stage1": 5,
+        "bits_stage2": 0,
+        "bits_total": 5,
+        "recall10": 87.77,
+        "qps": 2670.0,
+        "memory_mb": 80.6,
+        "build_s": 32.2
+      },
+      {
+        "label": "IVF-TQ (ours, b=4+sign)",
+        "bits_stage1": 4,
+        "bits_stage2": 1,
+        "bits_total": 5,
+        "recall10": 87.78,
+        "qps": 1514.0,
+        "memory_mb": 80.6,
+        "build_s": 27.1
+      },
+      {
+        "label": "Extended RaBitQ (proxy, B=6)",
+        "bits_stage1": 6,
+        "bits_stage2": 0,
+        "bits_total": 6,
+        "recall10": 91.07,
+        "qps": 2763.0,
+        "memory_mb": 95.9,
+        "build_s": 31.5
+      },
+      {
+        "label": "IVF-TQ (ours, b=5+sign)",
+        "bits_stage1": 5,
+        "bits_stage2": 1,
+        "bits_total": 6,
+        "recall10": 91.59,
+        "qps": 1500.0,
+        "memory_mb": 95.9,
+        "build_s": 28.6
+      }
+    ]
+  },
+  {
+    "dataset": "Deep-1M",
+    "dim": 96,
+    "nlist": 1000,
+    "nprobe": 20,
+    "n_queries": 1000,
+    "seed": 42,
+    "rows": [
+      {
+        "label": "Extended RaBitQ (proxy, B=4)",
+        "bits_stage1": 4,
+        "bits_stage2": 0,
+        "bits_total": 4,
+        "recall10": 83.57,
+        "qps": 2966.0,
+        "memory_mb": 50.0,
+        "build_s": 20.0
+      },
+      {
+        "label": "IVF-TQ (ours, b=3+sign)",
+        "bits_stage1": 3,
+        "bits_stage2": 1,
+        "bits_total": 4,
+        "recall10": 83.75,
+        "qps": 1811.0,
+        "memory_mb": 50.0,
+        "build_s": 19.9
+      },
+      {
+        "label": "Extended RaBitQ (proxy, B=5)",
+        "bits_stage1": 5,
+        "bits_stage2": 0,
+        "bits_total": 5,
+        "recall10": 89.74,
+        "qps": 2685.0,
+        "memory_mb": 61.4,
+        "build_s": 25.6
+      },
+      {
+        "label": "IVF-TQ (ours, b=4+sign)",
+        "bits_stage1": 4,
+        "bits_stage2": 1,
+        "bits_total": 5,
+        "recall10": 89.93,
+        "qps": 1850.0,
+        "memory_mb": 61.4,
+        "build_s": 23.3
+      },
+      {
+        "label": "Extended RaBitQ (proxy, B=6)",
+        "bits_stage1": 6,
+        "bits_stage2": 0,
+        "bits_total": 6,
+        "recall10": 92.47,
+        "qps": 2842.0,
+        "memory_mb": 72.8,
+        "build_s": 24.1
+      },
+      {
+        "label": "IVF-TQ (ours, b=5+sign)",
+        "bits_stage1": 5,
+        "bits_stage2": 1,
+        "bits_total": 6,
+        "recall10": 92.8,
+        "qps": 1910.0,
+        "memory_mb": 72.8,
+        "build_s": 22.8
+      }
+    ]
+  },
+  {
+    "dataset": "GloVe-1M",
+    "dim": 100,
+    "nlist": 1000,
+    "nprobe": 20,
+    "n_queries": 1000,
+    "seed": 42,
+    "rows": [
+      {
+        "label": "Extended RaBitQ (proxy, B=4)",
+        "bits_stage1": 4,
+        "bits_stage2": 0,
+        "bits_total": 4,
+        "recall10": 76.71,
+        "qps": 2657.0,
+        "memory_mb": 51.9,
+        "build_s": 21.8
+      },
+      {
+        "label": "IVF-TQ (ours, b=3+sign)",
+        "bits_stage1": 3,
+        "bits_stage2": 1,
+        "bits_total": 4,
+        "recall10": 76.21,
+        "qps": 1799.0,
+        "memory_mb": 51.9,
+        "build_s": 23.0
+      },
+      {
+        "label": "Extended RaBitQ (proxy, B=5)",
+        "bits_stage1": 5,
+        "bits_stage2": 0,
+        "bits_total": 5,
+        "recall10": 81.07,
+        "qps": 2741.0,
+        "memory_mb": 63.8,
+        "build_s": 26.2
+      },
+      {
+        "label": "IVF-TQ (ours, b=4+sign)",
+        "bits_stage1": 4,
+        "bits_stage2": 1,
+        "bits_total": 5,
+        "recall10": 81.03,
+        "qps": 1724.0,
+        "memory_mb": 63.8,
+        "build_s": 24.9
+      },
+      {
+        "label": "Extended RaBitQ (proxy, B=6)",
+        "bits_stage1": 6,
+        "bits_stage2": 0,
+        "bits_total": 6,
+        "recall10": 82.92,
+        "qps": 2567.0,
+        "memory_mb": 75.7,
+        "build_s": 28.0
+      },
+      {
+        "label": "IVF-TQ (ours, b=5+sign)",
+        "bits_stage1": 5,
+        "bits_stage2": 1,
+        "bits_total": 6,
+        "recall10": 83.35,
+        "qps": 1704.0,
+        "memory_mb": 75.7,
+        "build_s": 25.2
+      }
+    ]
+  }
+]

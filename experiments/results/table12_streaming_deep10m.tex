@@ -1,0 +1,17 @@
+\begin{table}[t]
+\caption{Streaming on Deep-10M, 3 seeds. Mean $\pm$ 95\% CI; paired t-tests on within-seed differences. Memory: IVF-TQ 512 bits/vec, IVF-PQ 384 bits/vec (0.75$\times$ IVF-TQ).}
+\label{tab:streaming_deep10m_multiseed}
+\centering\small
+\begin{tabular}{llcccc}
+\toprule
+Dataset & Index & Bits/vec & R@10 (1M) & R@10 (10M) & Change $\Delta$ \\
+\midrule
+  Deep-10M & IVF-TQ & 512 & 87.39 $\pm$ 0.33 & 86.59 $\pm$ 0.17 & $-0.80 \pm 0.25$ pp, $p=0.005$ \\
+  Deep-10M & IVF-PQ stale & 384 & 82.11 $\pm$ 0.15 & 78.87 $\pm$ 0.36 & $-3.23 \pm 0.49$ pp, $p=0.001$ \\
+  Deep-10M & IVF-PQ retrain & 384 & 82.11 $\pm$ 0.15 & 78.94 $\pm$ 0.09 & $-3.17 \pm 0.15$ pp, $p<0.001$ \\
+\midrule
+\multicolumn{6}{l}{\textit{IVF-TQ vs.\ IVF-PQ stale at 10M: $+7.72 \pm 0.26$ pp, $p<0.001$}} \\
+\multicolumn{6}{l}{\textit{IVF-PQ stale vs.\ retrain at 10M: $-0.06 \pm 0.44$ pp, $p=0.595$}} \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,90 @@
+# Python build / packaging
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+*.whl
+*.tar.gz
+build/
+dist/
+.eggs/
+
+# Compiled C/C++ extensions
+*.so
+*.dylib
+
+# Virtual environments / caches
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+
+# Local scratch
+/tmp/
+*.log
+
+# LaTeX build artefacts
+*.aux
+*.bbl
+*.blg
+*.brf
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.out
+*.synctex.gz
+*.toc
+*.run.xml
+*.bcf
+
+# PDFs and submission archives
+*.pdf
+*.zip
+
+# Local paper / build directories
+/arxiv/
+/paper/
+
+# Dataset caches and raw vector blobs
+experiments/cache/
+**/cache/
+*.fvecs
+*.bvecs
+*.ivecs
+*.npy
+*.npz
+*.h5
+*.hdf5
+
+# Partial / in-progress outputs
+*.partial
+*.partial.*
+
+# Local exploratory directories
+/archive/
+experiments/archive/
+experiments/legacy/
+experiments/neural_quantizer/
+
+# Notebooks
+.ipynb_checkpoints/
+**/*-checkpoint.ipynb
+
+# Misc image outputs
+*.png
+*.jpg
+*.jpeg
+!docs/dashboard.png

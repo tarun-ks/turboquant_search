@@ -1,25 +1,21 @@
 """
-Packed-theoretical vs resident memory for all methods at SIFT-1M (1M × 128-d).
-
-Shows the gap between memory_bytes (packed theoretical, bits-perfect) and
-actual resident memory for IVF-TQ and all baselines compared in the
-SIFT-1M table.
+Packed-theoretical vs resident memory for ALL methods at SIFT-1M (1M × 128-d).
 
 Key distinction:
-  FAISS methods (IVF-PQ, OPQ, HNSW): C++ byte-aligned storage.
-    - 8-bit PQ codes: 1 byte per sub-code → packed ≈ resident.
-    - HNSW: raw float32 vectors → packed = resident (float32 already byte-aligned).
-  IVF-TQ (numpy): each b-bit index stored as a full uint8 byte.
-    - b=4 or b=6, signs enabled: resident ≈ 4× packed (compression-only).
-    - With raw vectors (store_raw_vectors=True): +512 MB on top.
-    - Resident does NOT change with b — numpy overhead is constant regardless
-      of bit precision.
+  FAISS (IVF-PQ, OPQ, HNSW): C++ byte-aligned storage.
+    8-bit PQ codes: 1 byte per sub-code → packed = resident.
+    HNSW: raw float32 vectors → packed = resident.
+  IVF-TQ (numpy): each b-bit index stored as full uint8 byte.
+    b=4 OR b=6, signs enabled: resident ≈ 4× packed (compression-only).
+    b=4 and b=6 have IDENTICAL resident footprint (uint8 dtype is constant).
+    With raw vectors (store_raw_vectors=True): +512 MB on top.
+  Ext-RaBitQ: C++ bit-packed arrays → packed = resident.
 
 Usage:
     python experiments/measure_memory.py
 
-Requires FAISS ('pip install faiss-cpu') for baseline measurements.
-ScaNN requires a separate install and is skipped if not available.
+Requires faiss-cpu for FAISS baseline builds.
+ScaNN requires a separate install; skipped if unavailable.
 """
 
 from __future__ import annotations
@@ -34,7 +30,7 @@ sys.path.insert(0, str(ROOT))
 
 from turboquant_search import IVFTurboQuantIndex
 
-DATA_DIR = Path.home() / "data"
+DATA_DIR = Path.home() / ".cache" / "turboquant" / "sift1m"
 SIFT_PATH = DATA_DIR / "sift" / "sift_base.fvecs"
 
 N = 1_000_000
@@ -47,70 +43,26 @@ NPROBE = 20
 
 def read_fvecs(path: Path, max_n: int | None = None) -> np.ndarray:
     with open(path, "rb") as f:
-        raw = np.frombuffer(f.read(), dtype=np.float32)
-    d = int(raw[0])
-    n_total = len(raw) // (d + 1)
+        raw_bytes = f.read()
+    # Dimension header is int32 little-endian (NOT float32)
+    d = int.from_bytes(raw_bytes[:4], byteorder="little")
+    record_bytes = (d + 1) * 4   # 4 bytes for dim header + d × 4 bytes of float32
+    n_total = len(raw_bytes) // record_bytes
     n = min(n_total, max_n) if max_n else n_total
-    vecs = raw[: n * (d + 1)].reshape(n, d + 1)[:, 1:]
+    # Read entire file as float32; each record is [dim_as_f32, v0, v1, ..., vd-1]
+    raw = np.frombuffer(raw_bytes[:n * record_bytes], dtype=np.float32)
+    vecs = raw.reshape(n, d + 1)[:, 1:]   # drop the dim column
     return np.ascontiguousarray(vecs)
 
 
-def mb(b: int) -> str:
-    return f"{b / 1e6:.0f} MB"
+def mb(b: float) -> str:
+    return f"{int(round(b / 1e6))} MB"
 
 
-def print_row(method, packed_b, resident_b, note=""):
-    packed_s = mb(packed_b) if packed_b else "—"
-    resident_s = mb(resident_b) if resident_b else "—"
-    ratio = f"  ({resident_b / packed_b:.1f}× packed)" if packed_b and resident_b else ""
-    print(f"  {method:<40s}  packed={packed_s:>8s}  resident={resident_s:>8s}{ratio}"
-          + (f"  [{note}]" if note else ""))
+# ── IVF-TQ ────────────────────────────────────────────────────────────────────
 
-
-# ── analytical formulae ───────────────────────────────────────────────────────
-
-def faiss_ivfpq_resident(n, d, nlist, m, nbits=8):
-    """FAISS IVFPQIndex: byte-aligned codes (1 byte per sub-code for nbits=8)."""
-    code_bytes = n * ((m * nbits + 7) // 8)   # = n*m for nbits=8
-    pq_centroids = m * (1 << nbits) * (d // m) * 4   # float32
-    coarse_centroids = nlist * d * 4
-    return code_bytes + pq_centroids + coarse_centroids
-
-
-def faiss_opq_ivfpq_resident(n, d, nlist, m, nbits=8):
-    """OPQ rotation matrix (d×d float32) + IVFPQ."""
-    rotation = d * d * 4   # 64 KB for d=128, negligible
-    return faiss_ivfpq_resident(n, d, nlist, m, nbits) + rotation
-
-
-def faiss_hnsw_resident(n, d, M=32):
-    """HNSW: float32 vectors + int32 graph links (level-0 has 2M neighbours)."""
-    vectors = n * d * 4
-    # level-0: 2M links per node; higher levels negligible for large n
-    graph_links = n * M * 2 * 4   # int32
-    overhead = n * 8   # per-node metadata (level, lock, etc.)
-    return vectors + graph_links + overhead
-
-
-def scann_ah_resident(n, d, m=64, nbits=8):
-    """ScaNN AH (Asymmetric Hashing): similar byte layout to FAISS PQ."""
-    # ScaNN AH stores m sub-codes of nbits each (same as PQ at matched memory)
-    code_bytes = n * ((m * nbits + 7) // 8)
-    ah_centroids = m * (1 << nbits) * (d // m) * 4
-    return code_bytes + ah_centroids
-
-
-def ext_rabitq_resident(n, d, b_bits=4):
-    """Extended RaBitQ: b bits/coord + 1 norm float32 (packed bit arrays in C++)."""
-    code_bits = n * d * b_bits
-    code_bytes = (code_bits + 7) // 8
-    norms = n * 4
-    return code_bytes + norms
-
-
-# ── IVF-TQ measurement ────────────────────────────────────────────────────────
-
-def build_ivftq(vecs_normed, bits, store_raw):
+def build_ivftq(vecs_normed: np.ndarray, bits: int,
+                store_raw: bool) -> IVFTurboQuantIndex:
     idx = IVFTurboQuantIndex(
         dim=DIM, nlist=NLIST, bits=bits, nprobe=NPROBE,
         use_residual_sign=True, store_raw_vectors=store_raw,
@@ -120,53 +72,93 @@ def build_ivftq(vecs_normed, bits, store_raw):
     return idx
 
 
-def ivftq_resident_breakdown(idx: IVFTurboQuantIndex):
-    """Per-component resident breakdown."""
+def ivftq_breakdown(idx: IVFTurboQuantIndex) -> dict:
     part_total = 0
     for part in idx._partitions:
         for key in ("indices", "norms", "sign_bits", "codes"):
             arr = part.get(key)
             if arr is not None:
                 part_total += arr.nbytes
-    raw_bytes = idx._raw_vectors.nbytes if idx._raw_vectors is not None else 0
-    centroid_bytes = idx.coarse_centroids.nbytes if idx.coarse_centroids is not None else 0
-    return part_total, centroid_bytes, raw_bytes
+    raw_b = idx._raw_vectors.nbytes if idx._raw_vectors is not None else 0
+    cent_b = idx.coarse_centroids.nbytes if idx.coarse_centroids is not None else 0
+    return {"partition_arrays": part_total, "centroids": cent_b, "raw_vectors": raw_b}
 
 
-# ── FAISS measurement ─────────────────────────────────────────────────────────
+# ── FAISS ─────────────────────────────────────────────────────────────────────
 
-def build_faiss_baselines(vecs_normed):
+def build_faiss(vecs_normed: np.ndarray):
     try:
         import faiss
     except ImportError:
-        print("  [FAISS not installed — skipping measured baseline builds]")
+        print("  faiss-cpu not installed — FAISS builds skipped.")
         return None
 
     results = {}
 
     # IVF-PQ m=64
-    print("  Building FAISS IVF-PQ m=64…")
-    quantizer = faiss.IndexFlatIP(DIM)
-    idx_pq64 = faiss.IndexIVFPQ(quantizer, DIM, NLIST, 64, 8)
-    idx_pq64.train(vecs_normed[:100_000])
-    idx_pq64.add(vecs_normed)
+    print("  building FAISS IVF-PQ m=64 …")
+    q64 = faiss.IndexFlatIP(DIM)
+    idx64 = faiss.IndexIVFPQ(q64, DIM, NLIST, 64, 8)
+    idx64.train(vecs_normed[:100_000])
+    idx64.add(vecs_normed)
+    pq64_code = idx64.code_size * idx64.ntotal
+    pq64_pqcent = 64 * 256 * (DIM // 64) * 4
+    pq64_coarse = NLIST * DIM * 4
     results["ivfpq_m64"] = {
-        "code_size": idx_pq64.code_size,   # bytes per stored vector (= 64)
-        "measured_codes": idx_pq64.code_size * N,
+        "code_size_per_vec": idx64.code_size,
+        "codes": pq64_code,
+        "pq_centroids": pq64_pqcent,
+        "coarse_centroids": pq64_coarse,
+        "total_resident": pq64_code + pq64_pqcent + pq64_coarse,
     }
 
     # IVF-PQ m=128
-    print("  Building FAISS IVF-PQ m=128…")
-    quantizer2 = faiss.IndexFlatIP(DIM)
-    idx_pq128 = faiss.IndexIVFPQ(quantizer2, DIM, NLIST, 128, 8)
-    idx_pq128.train(vecs_normed[:100_000])
-    idx_pq128.add(vecs_normed)
+    print("  building FAISS IVF-PQ m=128 …")
+    q128 = faiss.IndexFlatIP(DIM)
+    idx128 = faiss.IndexIVFPQ(q128, DIM, NLIST, 128, 8)
+    idx128.train(vecs_normed[:100_000])
+    idx128.add(vecs_normed)
+    pq128_code = idx128.code_size * idx128.ntotal
+    pq128_pqcent = 128 * 256 * (DIM // 128) * 4
+    pq128_coarse = NLIST * DIM * 4
     results["ivfpq_m128"] = {
-        "code_size": idx_pq128.code_size,
-        "measured_codes": idx_pq128.code_size * N,
+        "code_size_per_vec": idx128.code_size,
+        "codes": pq128_code,
+        "pq_centroids": pq128_pqcent,
+        "coarse_centroids": pq128_coarse,
+        "total_resident": pq128_code + pq128_pqcent + pq128_coarse,
+    }
+
+    # HNSW M=32
+    print("  building FAISS HNSW M=32 …")
+    hnsw = faiss.IndexHNSWFlat(DIM, 32)
+    hnsw.add(vecs_normed)
+    hnsw_code = DIM * 4 * hnsw.ntotal   # float32 vectors (HNSW stores raw)
+    hnsw_graph = N * 32 * 2 * 4                # int32 links (level-0, 2M per node)
+    results["hnsw_m32"] = {
+        "code_size_per_vec": DIM * 4,   # float32 vectors (no sa_code_size on HNSW)
+        "vectors": hnsw_code,
+        "graph_links_approx": hnsw_graph,
+        "total_resident": hnsw_code + hnsw_graph,
     }
 
     return results
+
+
+# ── analytical estimates for methods not built ────────────────────────────────
+
+def ext_rabitq_analytical(n, d, b_bits):
+    """C++ packed bit arrays: packed = resident."""
+    code_bytes = (n * d * b_bits + 7) // 8
+    norms = n * 4
+    return code_bytes + norms
+
+
+def scann_ah_analytical(n, d, m, nbits=8):
+    """ScaNN AH: same layout as FAISS PQ at matched m."""
+    code_bytes = n * ((m * nbits + 7) // 8)
+    ah_cents = m * (1 << nbits) * (d // m) * 4
+    return code_bytes + ah_cents
 
 
 # ── main ──────────────────────────────────────────────────────────────────────
@@ -174,98 +166,104 @@ def build_faiss_baselines(vecs_normed):
 def main():
     if not SIFT_PATH.exists():
         print(f"SIFT base vectors not found at {SIFT_PATH}")
-        print(f"Set DATA_DIR at the top of this script.")
+        print(f"Set DATA_DIR to the directory containing sift/sift_base.fvecs.")
         sys.exit(1)
 
-    print(f"Loading SIFT-1M…")
+    print(f"Loading SIFT-1M …")
     vecs = read_fvecs(SIFT_PATH, max_n=N)
-    norms = np.linalg.norm(vecs, axis=1, keepdims=True)
-    vecs_normed = (vecs / np.maximum(norms, 1e-8)).astype(np.float32)
+    v_norms = np.linalg.norm(vecs, axis=1, keepdims=True)
+    vecs_normed = (vecs / np.maximum(v_norms, 1e-8)).astype(np.float32)
     print(f"  {len(vecs):,} × {DIM}-d loaded.\n")
 
-    print("=" * 72)
-    print(f"Memory accounting — SIFT-1M ({N:,} × {DIM}-d)  nlist={NLIST}")
-    print("=" * 72)
-
-    # ── IVF-TQ ───────────────────────────────────────────────────────────────
-    print("\n── IVF-TQ ──")
+    # ── build IVF-TQ (4 configs) ──────────────────────────────────────────
+    print("Building IVF-TQ indexes …")
+    tq_results = {}
     for bits in (4, 6):
         for store_raw in (False, True):
-            label = f"IVF-TQ b={bits} {'(+raw vectors)' if store_raw else '(compression-only)'}"
+            key = f"b{bits}_{'raw' if store_raw else 'noraw'}"
+            print(f"  IVF-TQ b={bits} store_raw={store_raw} …")
             idx = build_ivftq(vecs_normed, bits, store_raw)
-            packed = idx.memory_bytes
-            resident = idx.memory_bytes_resident()
-            part_b, cent_b, raw_b = ivftq_resident_breakdown(idx)
-            print_row(label, packed, resident)
-            if not store_raw:
-                print(f"    breakdown: indices+codes+signs={part_b/1e6:.0f}MB "
-                      f"centroids={cent_b/1e6:.1f}MB  raw=0MB")
-            else:
-                print(f"    breakdown: indices+codes+signs={part_b/1e6:.0f}MB "
-                      f"centroids={cent_b/1e6:.1f}MB  raw={raw_b/1e6:.0f}MB")
-            del idx
+            tq_results[key] = {
+                "packed": idx.memory_bytes,
+                "resident": idx.memory_bytes_resident(),
+                "breakdown": ivftq_breakdown(idx),
+            }
+            del idx   # free memory before next build
 
-    # ── FAISS (measured) ──────────────────────────────────────────────────────
-    print("\n── FAISS IVF-PQ (measured — C++ byte-aligned codes) ──")
-    faiss_results = build_faiss_baselines(vecs_normed)
+    # ── build FAISS baselines ─────────────────────────────────────────────
+    print("\nBuilding FAISS baselines …")
+    faiss_results = build_faiss(vecs_normed)
+    del vecs_normed   # free
 
-    # ── All methods (analytical) ──────────────────────────────────────────────
-    print("\n── All methods: packed theoretical vs resident (analytical) ──")
-    print(f"  {'Method':<40s}  {'Packed':>10s}  {'Resident':>10s}  Notes")
-    print(f"  {'─'*40}  {'─'*10}  {'─'*10}")
+    # ── print results ─────────────────────────────────────────────────────
+    print("\n" + "=" * 78)
+    print(f"Memory accounting — SIFT-1M ({N:,} × {DIM}-d)  nlist={NLIST}")
+    print("=" * 78)
+    print(f"\n{'Method':<42} {'Packed':>8} {'Resident':>9} {'Ratio':>6}  Notes")
+    print("─" * 78)
 
-    rows = [
-        ("FAISS IVF-PQ m=64  (8-bit)", 62e6,
-         faiss_ivfpq_resident(N, DIM, NLIST, 64),
-         "C++ byte-aligned: packed≈resident"),
-        ("FAISS IVF-PQ m=128 (8-bit)", 123e6,
-         faiss_ivfpq_resident(N, DIM, NLIST, 128),
-         "C++ byte-aligned: packed≈resident"),
-        ("FAISS OPQ+IVF-PQ m=128    ", 123e6,
-         faiss_opq_ivfpq_resident(N, DIM, NLIST, 128),
-         "+rotation matrix (negligible at d=128)"),
-        ("FAISS HNSW M=32            ", 732e6,
-         faiss_hnsw_resident(N, DIM, 32),
-         "float32 vectors + graph links"),
-        ("ScaNN AH m=64 (8-bit)      ", 62e6,
-         scann_ah_resident(N, DIM, 64),
-         "byte-aligned AH codes"),
-        ("Ext-RaBitQ b=4             ",
-         ext_rabitq_resident(N, DIM, 4),
-         ext_rabitq_resident(N, DIM, 4),
-         "C++ packed bit arrays → packed=resident"),
-        ("IVF-TQ b=4 compression-only",
-         84e6,
-         build_ivftq(vecs_normed, 4, False).memory_bytes_resident(),
-         "numpy uint8/element; no raw vectors"),
-        ("IVF-TQ b=6 compression-only",
-         111e6,
-         build_ivftq(vecs_normed, 6, False).memory_bytes_resident(),
-         "same resident as b=4 (uint8 dtype)"),
-        ("IVF-TQ b=6 with raw vectors",
-         111e6,
-         build_ivftq(vecs_normed, 6, True).memory_bytes_resident(),
-         "+512 MB float32 raw vectors"),
-    ]
-
-    for method, packed_b, resident_b, note in rows:
-        packed_s = f"{packed_b/1e6:.0f} MB"
-        resident_s = f"{resident_b/1e6:.0f} MB"
+    def row(name, packed_b, resident_b, note=""):
         ratio = resident_b / packed_b if packed_b else 0
-        ratio_s = f"{ratio:.1f}×" if ratio > 0 else "—"
-        print(f"  {method:<40s}  {packed_s:>8s}  {resident_s:>8s}  {ratio_s:>5s}  {note}")
+        print(f"  {name:<40} {mb(packed_b):>8} {mb(resident_b):>9} "
+              f"{ratio:>5.1f}×  {note}")
 
+    # IVF-TQ rows
+    for bits in (4, 6):
+        for store_raw in (False, True):
+            key = f"b{bits}_{'raw' if store_raw else 'noraw'}"
+            r = tq_results[key]
+            suffix = "(+raw vectors)" if store_raw else "(compression-only)"
+            row(f"IVF-TQ b={bits} {suffix}", r["packed"], r["resident"])
+            bd = r["breakdown"]
+            print(f"    partition arrays={mb(bd['partition_arrays'])}  "
+                  f"centroids={mb(bd['centroids'])}  "
+                  f"raw_vectors={mb(bd['raw_vectors'])}")
+
+    print()
+
+    # FAISS measured rows
     if faiss_results:
-        print("\n── FAISS measured code_size (bytes/vector) ──")
         for key, r in faiss_results.items():
-            print(f"  {key}: code_size={r['code_size']} B/vec → "
-                  f"{r['measured_codes']/1e6:.0f} MB codes for {N:,} vectors")
+            if key == "ivfpq_m64":
+                name = "FAISS IVF-PQ m=64  (8-bit)"
+                packed = r["codes"]     # codes = packed for 8-bit (1 byte/sub-code)
+                note = f"codes={mb(r['codes'])} pq_cents={mb(r['pq_centroids'])} coarse={mb(r['coarse_centroids'])}"
+            elif key == "ivfpq_m128":
+                name = "FAISS IVF-PQ m=128 (8-bit)"
+                packed = r["codes"]
+                note = f"codes={mb(r['codes'])} pq_cents={mb(r['pq_centroids'])} coarse={mb(r['coarse_centroids'])}"
+            elif key == "hnsw_m32":
+                name = "FAISS HNSW M=32"
+                packed = r["vectors"]
+                note = f"vectors={mb(r['vectors'])} graph={mb(r['graph_links_approx'])}"
+            row(name, packed, r["total_resident"], note)
 
-    print("\n── Key takeaway ──")
-    print("  FAISS PQ/OPQ: C++ byte-aligned storage → packed ≈ resident.")
-    print("  IVF-TQ (numpy): uint8 per coordinate → resident ≈ 4× packed (compression-only).")
-    print("  IVF-TQ b=4 and b=6 have the SAME resident footprint (uint8 dtype unchanged).")
-    print("  Raw vector store (+512 MB) is now opt-in: IVFTurboQuantIndex(store_raw_vectors=False).")
+    # Analytical rows (not built)
+    print("\n  --- analytical (C++ bit-packed, not built) ---")
+    ext4 = ext_rabitq_analytical(N, DIM, 4)
+    row("Ext-RaBitQ b=4 (C++ bit-packed)", ext4, ext4,
+        "packed=resident: C++ packs bits tightly")
+    scann = scann_ah_analytical(N, DIM, 64, 8)
+    row("ScaNN AH m=64  (8-bit, analytical)", scann, scann,
+        "same layout as FAISS PQ m=64")
+
+    # Key takeaways
+    print("\n" + "─" * 78)
+    print("Key takeaways:")
+    b4_noraw = tq_results["b4_noraw"]["resident"]
+    b6_noraw = tq_results["b6_noraw"]["resident"]
+    b4_raw   = tq_results["b4_raw"]["resident"]
+    b6_raw   = tq_results["b6_raw"]["resident"]
+
+    print(f"  IVF-TQ b=4 and b=6 have IDENTICAL resident: "
+          f"{mb(b4_noraw)} / {mb(b6_noraw)} (uint8 per coord regardless of b)")
+    if faiss_results and "ivfpq_m64" in faiss_results:
+        faiss64 = faiss_results["ivfpq_m64"]["total_resident"]
+        print(f"  At matched packed memory (~64 MB), IVF-TQ compression-only resident "
+              f"is {b4_noraw/faiss64:.1f}× FAISS IVF-PQ m=64")
+    print(f"  Raw-vector overhead: {mb(b6_raw - b6_noraw)} additional "
+          f"({b6_raw/b6_noraw:.1f}× compression-only resident)")
+    print(f"  store_raw_vectors=False saves {mb(b6_raw - b6_noraw)} at the cost of disabling rerank")
 
 
 if __name__ == "__main__":

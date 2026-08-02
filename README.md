@@ -196,18 +196,27 @@ Recall@10 at matched memory. Full numbers and all 10M-scale streaming results: s
 
 ### SIFT-1M (dim=128)
 
-Memory figures are **packed theoretical** (bits-perfect, no alignment padding).
-Actual numpy resident memory is larger — see `experiments/measure_memory.py`
-for a side-by-side comparison.
+Two memory columns: **Packed** is the bits-perfect theoretical minimum (same
+basis used by all published benchmarks). **Resident** is actual allocation.
+FAISS methods use C++ byte-aligned storage, so their packed ≈ resident.
+IVF-TQ uses numpy uint8 per coordinate, so resident is ~4× packed
+(compression-only) or ~8× packed (with raw vectors for reranking).
+See `experiments/measure_memory.py` for full measurements.
 
-| Method | Recall@10 | Memory (packed) | Training |
-|---|---|---|---|
-| FAISS IVF-PQ m=64, n_p=80 | 73.2% | 62 MB | PQ codebook |
-| FAISS OPQ+IVF-PQ m=128, n_p=80 | 97.0% | 123 MB | OPQ + PQ |
-| FAISS HNSW M=32, ef=64 | 98.2% | 732 MB | None |
-| ScaNN AH+tree, $L_s$=50 | 96.2% | 62 MB | ScaNN AH |
-| **IVF-TQ 6-bit, n_p=20 (ours)** | **93.2%** | **111 MB** | **k-means only** |
-| **IVF-TQ 6-bit, n_p=40 (ours)** | **96.1%** | **111 MB** | **k-means only** |
+| Method | Recall@10 | Packed | Resident | Training |
+|---|---|---|---|---|
+| FAISS IVF-PQ m=64, n_p=80 | 73.2% | 62 MB | ~62 MB¹ | PQ codebook |
+| FAISS OPQ+IVF-PQ m=128, n_p=80 | 97.0% | 123 MB | ~123 MB¹ | OPQ + PQ |
+| FAISS HNSW M=32, ef=64 | 98.2% | 732 MB | ~732 MB¹ | None |
+| ScaNN AH+tree, $L_s$=50 | 96.2% | 62 MB | ~62 MB¹ | ScaNN AH |
+| **IVF-TQ 6-bit, n_p=20 (ours)** | **93.2%** | **111 MB** | **~388 MB²** | **k-means only** |
+| **IVF-TQ 6-bit, n_p=40 (ours)** | **96.1%** | **111 MB** | **~388 MB²** | **k-means only** |
+
+¹ FAISS and ScaNN store byte-aligned C++ arrays; packed ≈ resident.
+² Compression-only (`store_raw_vectors=False`): numpy stores each b-bit index
+  as a full uint8 byte — indices(128MB) + sign\_bits(128MB) + norms(4MB) +
+  codes(128MB) + centroids(0.5MB). With raw vectors for reranking: ~900 MB.
+  Use `IVFTurboQuantIndex(store_raw_vectors=False)` to avoid the raw-vector cost.
 
 ### Streaming on 10M scale (3 seeds, sub-matched PQ memory)
 

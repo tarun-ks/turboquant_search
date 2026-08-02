@@ -498,13 +498,14 @@ class IVFTurboQuantIndex:
 
     def __init__(self, dim: int, nlist: int = 100, bits: int = 3,
                  nprobe: int = 10, use_residual_sign: bool = True,
-                 seed: int = 42):
+                 seed: int = 42, store_raw_vectors: bool = True):
         self.dim = dim
         self.nlist = nlist
         self.bits = bits
         self.nprobe = nprobe
         self.use_residual_sign = use_residual_sign
         self.seed = seed
+        self.store_raw_vectors = store_raw_vectors
 
         # Shared TQ parameters — these do NOT depend on data
         self.rotation_matrix = _get_rotation_matrix(dim, seed)
@@ -645,11 +646,12 @@ class IVFTurboQuantIndex:
                     )
                 part["codes"] = np.concatenate([part["codes"], codes])
 
-        # Store raw vectors for re-ranking
-        if self._raw_vectors is None:
-            self._raw_vectors = vectors_normed
-        else:
-            self._raw_vectors = np.concatenate([self._raw_vectors, vectors_normed])
+        # Store raw vectors for re-ranking (only if enabled)
+        if self.store_raw_vectors:
+            if self._raw_vectors is None:
+                self._raw_vectors = vectors_normed
+            else:
+                self._raw_vectors = np.concatenate([self._raw_vectors, vectors_normed])
 
         self._n_vectors += n
         self.build_time += time.time() - t0
@@ -880,11 +882,13 @@ class IVFTurboQuantIndex:
         """Actual numpy allocation in bytes (not packed theoretical footprint).
 
         Sums the .nbytes of every live array across all IVF partitions plus
-        coarse centroids and raw vectors (always stored for reranking).
+        coarse centroids and, when stored, raw vectors.
 
         Partition arrays: indices (uint8 n×dim), norms (float32 n),
         sign_bits (uint8 n×dim), codes (uint8 n×dim for C++ kernel).
-        Raw vectors: float32 n×dim — the dominant term at large N.
+        Raw vectors: float32 n×dim — only present when store_raw_vectors=True.
+        Set store_raw_vectors=False at construction to run in compression-only
+        mode (rerank is then silently skipped in search()).
         """
         total = 0
         for part in self._partitions:

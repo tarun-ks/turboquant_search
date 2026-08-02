@@ -1,0 +1,4 @@
+seed,rec_1m,rec_10m,delta_pp,lost_total,coverage_loss,ranking_loss,ranking_margin_crossed,frac_coverage_pct,frac_margin_crossed_of_ranking_pct,frac_total_explained_pct
+42,80.174,77.706,-2.468,1542,0,1542,1450,0.0,94.03,94.03
+123,80.01,77.671,-2.339,1472,0,1472,1391,0.0,94.5,94.5
+7777,79.819,77.684,-2.135,1486,0,1486,1411,0.0,94.95,94.95

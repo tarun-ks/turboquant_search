@@ -20,7 +20,13 @@ try:
     )
 
     if sys.platform == "darwin":
-        ext.extra_compile_args += ["-O3", "-ffast-math", "-march=native"]
+        import platform as _plat
+        # On Apple Silicon, -march=native emits the exact CPU (e.g. apple-m4),
+        # which older clang toolchains do not recognise. -mcpu=apple-m1 is the
+        # ISA baseline shared by all M-series and builds portably; on Intel
+        # macOS keep -march=native.
+        _arch_flag = "-mcpu=apple-m1" if _plat.machine() == "arm64" else "-march=native"
+        ext.extra_compile_args += ["-O3", "-ffast-math", _arch_flag]
         ext.extra_link_args += ["-framework", "Accelerate"]
         # OpenMP: skip on macOS due to compatibility issues with Python
         # Parallelization is done at the Python level instead

@@ -1,0 +1,4 @@
+dataset,ratio_mean,ratio_ci_lo,ratio_ci_hi,delta_pp_mean,delta_ci_lo,delta_ci_hi,frac_mean
+sift10m,0.1418,0.1365,0.1469,-2.314,-2.609,-2.018,0.8179
+t2i10m,0.2437,0.2352,0.252,-0.889,-1.175,-0.61,0.7168
+deep10m,0.2744,0.2647,0.2855,-0.842,-1.093,-0.593,0.684

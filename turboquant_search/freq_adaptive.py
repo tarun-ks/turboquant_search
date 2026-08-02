@@ -6,10 +6,13 @@ Vectors that are retrieved often ("hot") are stored at higher precision;
 vectors that are rarely retrieved ("cold") are stored at lower precision.
 
 Crucially: this is *only structurally possible with TQ*, because
-re-encoding any vector at any precision is O(d) work using the fixed
-Lloyd–Max codebook — no codebook retraining required. PQ-family methods
-would need to retrain a codebook to change a vector's bit budget,
-defeating the purpose.
+re-encoding any vector at any precision is O(d²) work — O(d²) for the
+dense rotation (d×d matrix multiply) plus O(d) for Lloyd–Max scalar
+requantization — and no codebook retraining is required. PQ-family
+methods would need to retrain a codebook to change a vector's bit budget,
+defeating the purpose.  Note: O(d²) is tolerable at d=128 but becomes
+a real bottleneck at d=768+; a structured fast transform (e.g., Hadamard)
+is not currently implemented.
 
 Implementation: maintain one IVF-TQ sub-index per supported bit width
 (default {2, 4, 6}). All sub-indexes share the IVF coarse centroids.

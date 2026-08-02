@@ -287,7 +287,11 @@ class TurboQuantSearchIndex:
         self._n_vectors += vectors.shape[0]
         self.build_time = time.time() - t0
 
-        # Calculate memory usage
+        # THEORETICAL PACKED footprint — bits-perfect (no alignment padding).
+        # Actual resident memory is larger: numpy stores each index/sign as a
+        # full uint8 byte, so resident ≈ 2×dim bytes/vector (indices + signs)
+        # vs the (b+1)/8 bytes/vector figure below.  Call memory_bytes_resident()
+        # for the true numpy allocation sum.
         bits_per_vector = self.bits * self.dim  # quantized coordinates
         bits_per_vector += 32  # norm (float32)
         if self.use_residual_sign:
@@ -433,6 +437,20 @@ class TurboQuantSearchIndex:
             return 0.0
         return self.memory_bytes_uncompressed / self.memory_bytes
 
+    def memory_bytes_resident(self) -> int:
+        """Actual numpy allocation in bytes (not packed theoretical footprint).
+
+        Counts every live array: indices (uint8 n×dim), norms (float32 n),
+        sign_bits (uint8 n×dim if enabled).  This is larger than memory_bytes
+        because numpy stores each quantized coordinate as a full byte rather
+        than packing b bits across bytes.
+        """
+        total = 0
+        for arr in (self._indices, self._norms, self._sign_bits):
+            if arr is not None:
+                total += arr.nbytes
+        return total
+
     def stats(self) -> dict:
         """Return index statistics."""
         return {
@@ -441,6 +459,7 @@ class TurboQuantSearchIndex:
             "bits": self.bits,
             "residual_mode": "sign-refine" if self.use_residual_sign else "none",
             "memory_mb": self.memory_bytes / (1024 * 1024),
+            "memory_resident_mb": self.memory_bytes_resident() / (1024 * 1024),
             "memory_uncompressed_mb": self.memory_bytes_uncompressed / (1024 * 1024),
             "compression_ratio": f"{self.compression_ratio:.1f}x",
             "build_time_s": f"{self.build_time:.3f}",
@@ -834,12 +853,50 @@ class IVFTurboQuantIndex:
 
     @property
     def memory_bytes(self) -> int:
+        """THEORETICAL PACKED footprint in bytes (bits-perfect, no alignment padding).
+
+        Computes the minimum bits needed to store all vectors at the configured
+        precision: bits×dim coordinate bits + 32 norm bits (+ dim sign bits if
+        enabled), then divides by 8.  This is what an optimally-packed binary
+        layout would require.
+
+        The actual numpy resident memory is substantially larger because each
+        quantized index is stored as a full uint8 byte.  Use
+        memory_bytes_resident() for the true allocation.
+
+        Example — 1M × 128-d, b=4, signs enabled:
+          Packed:   (4×128 + 32 + 128) / 8 × 1M  ≈  84 MB
+          Resident: indices(128MB) + signs(128MB) + norms(4MB)
+                    + raw_vectors(512MB)            ≈ 772 MB
+        """
         bits_per_vector = self.bits * self.dim + 32  # quant indices + norm
         if self.use_residual_sign:
             bits_per_vector += self.dim  # sign bits
         vector_bytes = (self._n_vectors * bits_per_vector) // 8
         centroid_bytes = self.nlist * self.dim * 4
         return vector_bytes + centroid_bytes
+
+    def memory_bytes_resident(self) -> int:
+        """Actual numpy allocation in bytes (not packed theoretical footprint).
+
+        Sums the .nbytes of every live array across all IVF partitions plus
+        coarse centroids and raw vectors (always stored for reranking).
+
+        Partition arrays: indices (uint8 n×dim), norms (float32 n),
+        sign_bits (uint8 n×dim), codes (uint8 n×dim for C++ kernel).
+        Raw vectors: float32 n×dim — the dominant term at large N.
+        """
+        total = 0
+        for part in self._partitions:
+            for key in ("indices", "norms", "sign_bits", "codes"):
+                arr = part.get(key)
+                if arr is not None:
+                    total += arr.nbytes
+        if self.coarse_centroids is not None:
+            total += self.coarse_centroids.nbytes
+        if self._raw_vectors is not None:
+            total += self._raw_vectors.nbytes
+        return total
 
     @property
     def compression_ratio(self) -> float:
@@ -857,7 +914,8 @@ class IVFTurboQuantIndex:
             "nprobe": self.nprobe,
             "bits": self.bits,
             "residual_mode": "sign-refine" if self.use_residual_sign else "none",
-            "memory_mb": self.memory_bytes / (1024 * 1024),
+            "memory_packed_mb": self.memory_bytes / (1024 * 1024),
+            "memory_resident_mb": self.memory_bytes_resident() / (1024 * 1024),
             "memory_uncompressed_mb": (self._n_vectors * self.dim * 4)
             / (1024 * 1024),
             "compression_ratio": f"{self.compression_ratio:.1f}x",

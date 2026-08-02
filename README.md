@@ -47,7 +47,7 @@ python experiments/compare_stage2.py            # Sign-bit refinement vs QJL at 
 
 ### Reproducing the 9-cell streaming matrix (3 datasets × 3 PQ memory regimes)
 
-The paper reports streaming results across 3 seeds (42, 123, 7777) with paired-$t$ CIs. See [`experiments/MULTISEED.md`](experiments/MULTISEED.md) for the full protocol. Wall-clock: ~3 h on a 16 GB M-series MacBook for the 1M-scale cells; T2I-10M needs more memory.
+All streaming results span 3 seeds (42, 123, 7777) with paired-$t$ CIs. See [`experiments/MULTISEED.md`](experiments/MULTISEED.md) for the full protocol. Wall-clock: ~3 h on a 16 GB M-series MacBook for the 1M-scale cells; T2I-10M needs more memory.
 
 ```bash
 # Deep-10M (three PQ memory regimes)
@@ -78,6 +78,53 @@ python experiments/tables_from_multiseed.py
 
 Outputs land under `experiments/results/`: per-experiment CSVs and a human-readable `multiseed_summary.txt`. Per-batch trajectory `.md` files for each dataset and regime are in [`paper_supplementary/`](paper_supplementary/).
 
+### Reproducing the corpus-growth mechanism results
+
+These scripts isolate *why* IVF-PQ degrades as N grows — margin shrinkage overtaking fixed quantization error, not codebook staleness. Run in order; each step produces the CSV consumed by the next.
+
+```bash
+# Step 1: Oracle baseline (confirm staleness explanation is wrong)
+# Each script: ~40 min for SIFT/Deep, ~70 min for T2I (Apple M-series, 16 GB)
+# Output: experiments/results/streaming_oracle_{dataset}.csv
+python experiments/streaming_oracle.py --dataset sift10m
+python experiments/streaming_oracle.py --dataset deep10m
+python experiments/streaming_oracle.py --dataset t2i10m
+
+# Step 2: Uncompressed IVF (isolate coverage vs compression effects)
+# Output: experiments/results/streaming_uncompressed_{dataset}.csv
+python experiments/streaming_uncompressed.py --dataset sift10m
+python experiments/streaming_uncompressed.py --dataset deep10m
+python experiments/streaming_uncompressed.py --dataset t2i10m
+
+# Step 3: Margin vs distortion at the decision boundary
+# Output: experiments/results/rank_margin_{dataset}.csv
+python experiments/rank_margin.py --dataset sift10m
+python experiments/rank_margin.py --dataset deep10m
+python experiments/rank_margin.py --dataset t2i10m
+
+# Step 4: Per-query causal decomposition (3 seeds, ~5–8 min/seed)
+# Output: experiments/results/perquery_{dataset}.csv  (10K rows × 3 seeds)
+python experiments/perquery_analysis.py --dataset sift10m
+python experiments/perquery_analysis.py --dataset deep10m
+python experiments/perquery_analysis.py --dataset t2i10m
+
+# Step 5: Bootstrap CIs on margin/err ratio — confirms ordering is real
+# Output: experiments/results/bootstrap_ci_summary.csv
+python experiments/bootstrap_ci.py
+```
+
+**Expected key numbers** (3 seeds, 10K queries each):
+
+| Dataset | Coverage losses | err > margin (of ranking losses) | ratio CI (95%) |
+|---|---|---|---|
+| SIFT-10M | 0% | 94.5% ± 0.5% | [0.136, 0.147] |
+| T2I-10M  | 0% | 89.8% ± 1.7% | [0.235, 0.252] |
+| Deep-10M | 0% | 87.7% ± 0.6% | [0.265, 0.285] |
+
+All three dataset CIs are fully separated — ratio strictly orders degradation severity. The SIFT–Deep crossing-fraction gap (94.5% vs 87.7%) is predicted by the ratio ordering (lower ratio → more boundary-adjacent neighbors → higher crossing fraction).
+
+Memory: ~16 GB RAM needed for T2I-10M (200-d, 10M vectors). SIFT and Deep run on 8 GB.
+
 ## When to use this library
 
 - **Streaming corpora.** Codebook-free residual compression eliminates the silent recall drift PQ/OPQ/ScaNN suffer when the database grows past the codebook-training sample. New vectors are encoded at full quality with no retraining.
@@ -94,7 +141,7 @@ pip install turboquant-search[all]       # + FAISS baselines + dataset loaders
 
 ## Quick Start
 
-The flat `TurboQuantSearchIndex` below is the easiest starting point and works well for ≤100K vectors. **For larger corpora use `IVFTurboQuantIndex`** (next block) — the paper's contributions are about the IVF version; flat is provided for prototyping and as a building block.
+The flat `TurboQuantSearchIndex` below is the easiest starting point and works well for ≤100K vectors. **For larger corpora use `IVFTurboQuantIndex`** (next block) — the IVF version is the primary index in this library; flat is provided for prototyping and as a building block.
 
 > **Note on the random-data example below.** Random Gaussian vectors are *pessimal* for any IVF-style index because they have no cluster structure. The example below works (it builds, indexes, searches) but produces a lower recall than you would see on real embeddings (SIFT, GloVe, BERT, OpenAI, Cohere, etc.). For realistic numbers, see [`experiments/run_benchmarks.py`](experiments/run_benchmarks.py).
 
@@ -149,7 +196,11 @@ Recall@10 at matched memory. Full numbers and all 10M-scale streaming results: s
 
 ### SIFT-1M (dim=128)
 
-| Method | Recall@10 | Memory | Training |
+Memory figures are **packed theoretical** (bits-perfect, no alignment padding).
+Actual numpy resident memory is larger — see `experiments/measure_memory.py`
+for a side-by-side comparison.
+
+| Method | Recall@10 | Memory (packed) | Training |
 |---|---|---|---|
 | FAISS IVF-PQ m=64, n_p=80 | 73.2% | 62 MB | PQ codebook |
 | FAISS OPQ+IVF-PQ m=128, n_p=80 | 97.0% | 123 MB | OPQ + PQ |
@@ -200,14 +251,14 @@ To use with a vector DB, you would compress with TurboQuant, then store the comp
 
 ## Limitations
 
-- **Research-prototype kernel.** On SIFT-1M, FAISS IVF-PQ achieves ~53K QPS at $n_p$=10 versus our IVF-TQ implementation's ~22K QPS — a ~2.4× gap. FAISS uses optimized C++ with SIMD-accelerated ADC kernels (FastScan-style int8 LUTs); ours is Python/NumPy with a NEON-accelerated C++ inner loop using scalar table lookups. Closing the gap needs a FastScan-style SIMD-LUT kernel; on the v2 roadmap.
+- **Research-prototype kernel.** On SIFT-1M with the NEON-accelerated C++ kernel, IVF-TQ achieves ~13K QPS at $n_p$=20 (confirmed, seed=42). FAISS IVF-PQ achieves ~6.6K QPS at the same nprobe. Absolute throughput depends on nprobe; at lower nprobe FAISS benefits more from its FastScan-style SIMD-LUT kernels. Closing the gap needs a FastScan-style SIMD-LUT kernel; on the v2 roadmap.
 - **IVF amplification matters at scale.** Flat-TQ recall benefits from sign-bit refinement (~+11.4pp over QJL across 6 flat-TQ cells), but the IVF-TQ advantage over IVF-PQ comes mainly from IVF amplification, not the residual quantizer alone. Under IVF, sign-bit vs Extended-RaBitQ-equivalent are within statistical noise.
 - **Synthetic / uniform data.** IVF partitioning hurts when clusters are uniform. The IVF-TQ advantage appears on real data with natural cluster structure (SIFT, Deep, GloVe, T2I).
 - **Stage 2 uses sign-bit refinement, not QJL.** Sign-bit is the choice for nearest-neighbour ranking; QJL is the choice for unbiased KV-cache attention scoring. See "Stage 2 design choice" below.
 
 ## How It Works
 
-**Stage 1: Rotation + Lloyd-Max Quantization** — Multiply by a random orthogonal matrix (QR of Gaussian). Each coordinate becomes ~N(0, 1/d). Apply the optimal scalar quantizer for this distribution (b bits per coordinate). Store quantization indices + vector norm.
+**Stage 1: Rotation + Lloyd-Max Quantization** — Multiply by a random orthogonal matrix (QR of Gaussian). Each coordinate becomes ~N(0, 1/d). Apply the optimal scalar quantizer for this distribution (b bits per coordinate). Store quantization indices + vector norm. The rotation is a dense d×d matrix multiply — O(d²) per vector. At d=128 this is fast; at d=768+ it becomes a real throughput bottleneck. A structured fast transform (Hadamard-style) would reduce this to O(d log d) but is not currently implemented.
 
 **Stage 2: Sign-Bit Refinement** — Split each quantization bin at its centroid. Store 1 extra bit (above/below) per coordinate. This doubles effective resolution from 2^b to 2^(b+1) levels using the conditional expectation of each half-bin.
 
@@ -273,13 +324,15 @@ tests/                   # Unit tests
 * ✅ Adaptive coarse-partition refresh
 * ✅ Encoder-swap robustness (3-seed paired-$t$, MS MARCO)
 * ✅ NEON-accelerated C++ inner loop
+* ✅ Corpus-growth degradation mechanism: per-miss causal decomposition (3 datasets × 3 seeds); 87–94% of losses have err > margin, 0% coverage losses across all datasets
+* ✅ Bootstrap CIs on margin/err ratio: all three datasets (SIFT/T2I/Deep) fully separated — ratio strictly orders degradation severity
 
 ### Future work
-* FastScan-style SIMD LUTs (int8) to match FAISS ADC kernel throughput
-  (see paper §7 — current 2.4× QPS gap is memory-bandwidth-bound; expected to close with int8 LUTs)
-* 100M+-scale validation (see paper §7 limitations)
+* FastScan-style SIMD LUTs (int8) to further reduce QPS gap with FAISS
+* 100M+-scale validation
 * GPU acceleration (CuPy / CUDA)
-* Extended graph-baseline sweep (DiskANN, SPANN, NSG beyond the HNSW comparison in Table 7)
+* Hadamard-style fast rotation to reduce per-vector cost from O(d²) to O(d log d) at high dimensions (d=768+)
+* Extended graph-baseline sweep (DiskANN, SPANN, NSG beyond the HNSW comparison)
 
 Contributions welcome.
 

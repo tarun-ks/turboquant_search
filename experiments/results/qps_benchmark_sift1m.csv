@@ -1,0 +1,8 @@
+method,bits,nprobe,qps,recall_at_10,kernel
+ivf_tq_b4_np20,4,20,12945.0,87.6,cpp_neon
+ivf_tq_b5_np20,5,20,13020.0,91.41,cpp_neon
+ivf_tq_b6_np20,6,20,12761.0,93.18,cpp_neon
+ivf_tq_b6_np40,6,40,6795.0,95.98,cpp_neon
+ivf_pq_m64_b10_np20,10,20,6586.0,81.85,faiss_ivfpq
+ivf_pq_m64_b10_np80,10,80,1749.0,84.09,faiss_ivfpq
+ivf_pq_m128_b10_np20,10,20,3377.0,93.45,faiss_ivfpq

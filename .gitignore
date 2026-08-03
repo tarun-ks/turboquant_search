@@ -88,3 +88,6 @@ experiments/neural_quantizer/
 *.jpg
 *.jpeg
 !docs/dashboard.png
+
+# Paper drafts - not part of public code repo
+paper_is/

@@ -1,0 +1,158 @@
+{
+  "SIFT-1M": {
+    "opq_m64": [
+      {
+        "nprobe": 5,
+        "recall10": 67.6,
+        "qps": 59720,
+        "memory_mb": 64.7
+      },
+      {
+        "nprobe": 10,
+        "recall10": 76.13,
+        "qps": 43088,
+        "memory_mb": 64.7
+      },
+      {
+        "nprobe": 20,
+        "recall10": 80.31,
+        "qps": 26797,
+        "memory_mb": 64.7
+      },
+      {
+        "nprobe": 40,
+        "recall10": 81.85,
+        "qps": 15019,
+        "memory_mb": 64.7
+      },
+      {
+        "nprobe": 80,
+        "recall10": 82.25,
+        "qps": 7501,
+        "memory_mb": 64.7
+      },
+      {
+        "nprobe": 160,
+        "recall10": 82.32,
+        "qps": 3353,
+        "memory_mb": 64.7
+      }
+    ],
+    "opq_m128": [
+      {
+        "nprobe": 5,
+        "recall10": 74.76,
+        "qps": 51885,
+        "memory_mb": 128.7
+      },
+      {
+        "nprobe": 10,
+        "recall10": 86.69,
+        "qps": 27598,
+        "memory_mb": 128.7
+      },
+      {
+        "nprobe": 20,
+        "recall10": 93.42,
+        "qps": 14838,
+        "memory_mb": 128.7
+      },
+      {
+        "nprobe": 40,
+        "recall10": 96.2,
+        "qps": 7874,
+        "memory_mb": 128.7
+      },
+      {
+        "nprobe": 80,
+        "recall10": 96.97,
+        "qps": 3931,
+        "memory_mb": 128.7
+      },
+      {
+        "nprobe": 160,
+        "recall10": 97.09,
+        "qps": 2037,
+        "memory_mb": 128.7
+      }
+    ]
+  },
+  "Deep-1M": {
+    "opq_m48": [
+      {
+        "nprobe": 5,
+        "recall10": 73.58,
+        "qps": 129165,
+        "memory_mb": 48.5
+      },
+      {
+        "nprobe": 10,
+        "recall10": 80.12,
+        "qps": 82440,
+        "memory_mb": 48.5
+      },
+      {
+        "nprobe": 20,
+        "recall10": 83.33,
+        "qps": 43462,
+        "memory_mb": 48.5
+      },
+      {
+        "nprobe": 40,
+        "recall10": 84.63,
+        "qps": 23110,
+        "memory_mb": 48.5
+      },
+      {
+        "nprobe": 80,
+        "recall10": 85.09,
+        "qps": 12691,
+        "memory_mb": 48.5
+      },
+      {
+        "nprobe": 160,
+        "recall10": 85.22,
+        "qps": 6346,
+        "memory_mb": 48.5
+      }
+    ],
+    "opq_m96": [
+      {
+        "nprobe": 5,
+        "recall10": 80.91,
+        "qps": 70229,
+        "memory_mb": 96.5
+      },
+      {
+        "nprobe": 10,
+        "recall10": 89.82,
+        "qps": 39863,
+        "memory_mb": 96.5
+      },
+      {
+        "nprobe": 20,
+        "recall10": 94.52,
+        "qps": 21062,
+        "memory_mb": 96.5
+      },
+      {
+        "nprobe": 40,
+        "recall10": 96.58,
+        "qps": 11829,
+        "memory_mb": 96.5
+      },
+      {
+        "nprobe": 80,
+        "recall10": 97.36,
+        "qps": 5953,
+        "memory_mb": 96.5
+      },
+      {
+        "nprobe": 160,
+        "recall10": 97.57,
+        "qps": 3059,
+        "memory_mb": 96.5
+      }
+    ]
+  }
+}

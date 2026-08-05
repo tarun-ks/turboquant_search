@@ -1,19 +1,27 @@
 """
-Clean QPS benchmark for IVF-TQ with the C++ NEON kernel.
+QPS benchmark for IVF-TQ (C++ kernel) and all FAISS comparison methods.
 
-Resolves the Table 1 split: the paper claims 11K QPS (C++ kernel run),
-the recall_qps_sweep showed 4.5K (Python fallback at time of sweep).
-This script measures cleanly with the rebuilt cpython-314 kernel active.
+All methods measured on the same machine, same query set, same warmup/timed
+protocol — so QPS figures are directly comparable in a single table column.
 
 Protocol
 --------
-* SIFT-1M, 10K queries (the standard benchmark set).
-* IVF-TQ at every (bits, nprobe) config in Table 1: (4,20), (5,20), (6,20), (6,40).
-* FAISS IVF-PQ for comparison: (m64/b10, np=20), (m128/b10, np=20).
+* SIFT-1M, 10K queries (standard benchmark set), unit-L2 normalized.
 * Warm-up: 5 passes of 1K queries (discarded).
 * Timed: 10 passes of all 10K queries; QPS = total_queries / total_time.
-* Kernel active check: if _tqs_cpp not importable, script errors out.
+* IVF-TQ uses the C++ NEON kernel (script errors out if not available).
+* FAISS methods (IVF-PQ, OPQ, HNSW) use the same Python/C++ FAISS library.
+* nprobe set via faiss.ParameterSpace for all IVF-family indexes.
 * Output: experiments/results/qps_benchmark_sift1m.csv
+
+Methods
+-------
+* IVF-TQ b=4/5/6 at np=20; b=6 at np=40
+* FAISS IVF-PQ m=64 (10-bit) at np=20 and np=80
+* FAISS IVF-PQ m=128 (10-bit) at np=20
+* FAISS OPQ+IVF-PQ m=64 (8-bit) at np=20 and np=80
+* FAISS OPQ+IVF-PQ m=128 (8-bit) at np=20 and np=80
+* FAISS HNSW M=32 at ef=64 and ef=256
 
 Usage: python experiments/qps_benchmark.py
 """
@@ -112,6 +120,41 @@ def build_pq(vectors_normed: np.ndarray, dim: int,
     return idx
 
 
+def build_opq(vectors_normed: np.ndarray, dim: int, m: int) -> faiss.Index:
+    """Build OPQ+IVF-PQ (8-bit) with nlist=1000. Returns IndexPreTransform."""
+    nlist = 1000
+    opq = faiss.OPQMatrix(dim, m)
+    opq.niter = 25
+    quantizer = faiss.IndexFlatIP(dim)
+    ivfpq = faiss.IndexIVFPQ(quantizer, dim, nlist, m, 8, faiss.METRIC_INNER_PRODUCT)
+    index = faiss.IndexPreTransform(opq, ivfpq)
+    index.train(vectors_normed)
+    index.add(vectors_normed)
+    return index
+
+
+def build_hnsw(vectors_normed: np.ndarray, dim: int, M: int = 32) -> faiss.Index:
+    """Build FAISS HNSW (IP metric). efConstruction=40 (FAISS default)."""
+    index = faiss.IndexHNSWFlat(dim, M, faiss.METRIC_INNER_PRODUCT)
+    index.hnsw.efConstruction = 40
+    index.add(vectors_normed)
+    return index
+
+
+def measure_faiss_qps(index, queries_normed: np.ndarray, k: int = 10) -> Tuple[float, np.ndarray]:
+    """Measure QPS for a raw FAISS index using the standard protocol."""
+    for _ in range(WARMUP_PASSES):
+        index.search(queries_normed[:1000], k)
+    elapsed = 0.0
+    results = None
+    for _ in range(TIMED_PASSES):
+        t1 = time.perf_counter()
+        _, results = index.search(queries_normed, k)
+        elapsed += time.perf_counter() - t1
+    qps = (queries_normed.shape[0] * TIMED_PASSES) / elapsed
+    return qps, results
+
+
 def main():
     vectors, queries = load_sift1m_data()
     dim = vectors.shape[1]
@@ -150,20 +193,13 @@ def main():
         del idx
 
     # IVF-PQ configs for comparison
+    ps = faiss.ParameterSpace()
     for m, bits_sub, nprobe in [(64, 10, 20), (64, 10, 80), (128, 10, 20)]:
         label = f"ivf_pq_m{m}_b{bits_sub}_np{nprobe}"
         log(f"\n[{label}] building…")
         idx = build_pq(vectors_normed, dim, m, bits_sub, nprobe, SEED)
-        idx.nprobe = nprobe
-        t0 = time.perf_counter()
-        for _ in range(WARMUP_PASSES):
-            idx.search(queries_normed[:1000], 10)
-        elapsed = 0.0
-        for _ in range(TIMED_PASSES):
-            t1 = time.perf_counter()
-            _, results = idx.search(queries_normed, 10)
-            elapsed += time.perf_counter() - t1
-        qps = (queries_normed.shape[0] * TIMED_PASSES) / elapsed
+        ps.set_index_parameter(idx, "nprobe", nprobe)
+        qps, results = measure_faiss_qps(idx, queries_normed)
         recall = compute_recall(gt, results, 10) * 100
         log(f"  QPS={qps:,.0f}  recall@10={recall:.2f}%")
         configs.append({
@@ -175,6 +211,45 @@ def main():
             "kernel": "faiss_ivfpq",
         })
         del idx
+
+    # OPQ+IVF-PQ configs — built once per m, nprobe swept via ParameterSpace
+    for m in [64, 128]:
+        log(f"\n[opq_m{m}] building (8-bit, nlist=1000)…")
+        idx = build_opq(vectors_normed, dim, m)
+        for nprobe in [20, 80]:
+            label = f"opq_m{m}_np{nprobe}"
+            ps.set_index_parameter(idx, "nprobe", nprobe)
+            qps, results = measure_faiss_qps(idx, queries_normed)
+            recall = compute_recall(gt, results, 10) * 100
+            log(f"  [{label}] QPS={qps:,.0f}  recall@10={recall:.2f}%")
+            configs.append({
+                "method": label,
+                "bits": 8,
+                "nprobe": nprobe,
+                "qps": round(qps, 0),
+                "recall_at_10": round(recall, 2),
+                "kernel": "faiss_opq_ivfpq",
+            })
+        del idx
+
+    # HNSW M=32 — built once, ef_search swept
+    log("\n[hnsw_m32] building (IP metric, efConstruction=40)…")
+    idx_hnsw = build_hnsw(vectors_normed, dim, M=32)
+    for ef in [64, 256]:
+        label = f"hnsw_m32_ef{ef}"
+        idx_hnsw.hnsw.efSearch = ef
+        qps, results = measure_faiss_qps(idx_hnsw, queries_normed)
+        recall = compute_recall(gt, results, 10) * 100
+        log(f"  [{label}] QPS={qps:,.0f}  recall@10={recall:.2f}%")
+        configs.append({
+            "method": label,
+            "bits": 32,
+            "nprobe": ef,
+            "qps": round(qps, 0),
+            "recall_at_10": round(recall, 2),
+            "kernel": "faiss_hnsw",
+        })
+    del idx_hnsw
 
     df = pd.DataFrame(configs)
     out = RESULTS_DIR / "qps_benchmark_sift1m.csv"

@@ -4,17 +4,15 @@
 
 # TurboQuant Search
 
-**One-line:** A codebook-free IVF index for vector search that doesn't degrade under streaming ingestion.
+**One-line:** A codebook-free IVF index for vector search, with a benchmark suite and mechanism analysis for recall degradation under corpus growth.
 
-**Title:** *IVF-TQ: Calibration-Free Streaming Vector Search via a Codebook-Free Residual Layer.*
-
-- **Why:** No codebook re-training when your corpus grows. Across nine controlled cells (three 10M datasets × three PQ memory regimes × three seeds), per-batch PQ codebook retraining is statistically indistinguishable from no retraining in 8 of 9 cells while costing 667–1328s of cumulative compute per run. IVF-TQ holds at one fixed $(b, d)$ configuration on all three datasets with $\Delta \in [-0.80, +0.56]$pp.
+- **Why:** No codebook re-training when your corpus grows. Across nine controlled cells (three 10M datasets × three PQ memory regimes × three seeds), per-batch PQ codebook retraining is statistically indistinguishable from no retraining in 8 of 9 cells while costing 667–1328s of cumulative compute per run. At sub-matched memory, IVF-TQ is more stable than IVF-PQ across all three datasets with $\Delta \in [-0.80, +0.56]$pp.
 - **Install:** `pip install turboquant-search[all]`
 - **Run:** `cd experiments && python run_benchmarks.py`
 
 ---
 
-An IVF index whose residual compression layer is **codebook-free**: a fixed random rotation followed by precomputed Lloyd–Max scalar quantization that depends only on bit width and dimension. Building on Google Research's [TurboQuant](https://arxiv.org/abs/2504.19874). The IVF coarse partition is still trained by k-means; only the residual is data-independent.
+An IVF index whose residual compression layer is **codebook-free**: a fixed random rotation followed by precomputed Lloyd–Max scalar quantization that depends only on bit width and dimension. Building on [TurboQuant](https://arxiv.org/abs/2504.19874) (Zandieh et al., ICLR 2026). The IVF coarse partition is still trained by k-means; only the residual is data-independent.
 
 **Why it matters.** Production ANN compression methods (PQ, OPQ, ScaNN, RaBitQ) fit a codebook to an initial training sample and reuse it as the database grows. The codebook silently goes stale. Across 3 seeds (42, 123, 7777) on streaming 10M ingestion at sub-matched memory ($\sim$0.75–0.78× IVF-TQ):
 
@@ -22,7 +20,7 @@ An IVF index whose residual compression layer is **codebook-free**: a fixed rand
 - SIFT-10M: IVF-PQ drops $-5.80 \pm 0.55$pp; IVF-TQ *improves* by $+0.56 \pm 0.10$pp.
 - T2I-10M (200-dim, Yandex Text2Image-1B prefix): IVF-PQ drops $-3.24 \pm 0.28$pp; IVF-TQ holds at $-0.76 \pm 0.41$pp.
 
-Per-batch PQ retraining is statistically indistinguishable from no retraining in 8 of 9 cells across (3 datasets × 3 memory regimes). At bit-matched memory ($\sim$0.95× IVF-TQ), IVF-PQ stabilises on Deep-10M and T2I-10M but **still degrades on SIFT-10M** ($-2.31$pp, $+6.79$pp behind IVF-TQ) — the capacity threshold for PQ streaming stability is dataset-dependent. **IVF-TQ has no codebook to go stale** — one fixed $(b, d)$ configuration holds on all three datasets.
+Per-batch PQ retraining is statistically indistinguishable from no retraining in 8 of 9 cells across (3 datasets × 3 memory regimes). At bit-matched memory ($\sim$0.95× IVF-TQ), IVF-PQ stabilises on Deep-10M and T2I-10M but **still degrades on SIFT-10M** ($-2.31$pp, $+6.79$pp behind IVF-TQ) — the capacity threshold for PQ streaming stability is dataset-dependent. **IVF-TQ's residual quantizer has no data-dependent codebook** — the $(b, d)$ configuration is fixed at build time and independent of corpus size.
 
 ## Quick benchmarks
 
@@ -76,7 +74,7 @@ python experiments/embed_swap_multiseed.py --swap bge     --seeds 42 123 7777   
 python experiments/tables_from_multiseed.py
 ```
 
-Outputs land under `experiments/results/`: per-experiment CSVs and a human-readable `multiseed_summary.txt`. Per-batch trajectory `.md` files for each dataset and regime are in [`paper_supplementary/`](paper_supplementary/).
+Outputs land under `experiments/results/`: per-experiment CSVs and a human-readable `multiseed_summary.txt`. Per-batch trajectory `.md` files for each dataset and regime are in [`paper_supplementary/`](paper_supplementary/) (supplementary analysis and full trajectory tables).
 
 ### Reproducing the corpus-growth mechanism results
 
@@ -196,18 +194,27 @@ Recall@10 at matched memory. Full numbers and all 10M-scale streaming results: s
 
 ### SIFT-1M (dim=128)
 
-Memory figures are **packed theoretical** (bits-perfect, no alignment padding).
-Actual numpy resident memory is larger — see `experiments/measure_memory.py`
-for a side-by-side comparison.
+Two memory columns: **Packed** is the bits-perfect theoretical minimum (same
+basis used by all published benchmarks). **Resident** is actual allocation.
+FAISS methods use C++ byte-aligned storage, so their packed ≈ resident.
+IVF-TQ uses numpy uint8 per coordinate, so resident is ~4× packed
+(compression-only) or ~8× packed (with raw vectors for reranking).
+See `experiments/measure_memory.py` for full measurements.
 
-| Method | Recall@10 | Memory (packed) | Training |
-|---|---|---|---|
-| FAISS IVF-PQ m=64, n_p=80 | 73.2% | 62 MB | PQ codebook |
-| FAISS OPQ+IVF-PQ m=128, n_p=80 | 97.0% | 123 MB | OPQ + PQ |
-| FAISS HNSW M=32, ef=64 | 98.2% | 732 MB | None |
-| ScaNN AH+tree, $L_s$=50 | 96.2% | 62 MB | ScaNN AH |
-| **IVF-TQ 6-bit, n_p=20 (ours)** | **93.2%** | **111 MB** | **k-means only** |
-| **IVF-TQ 6-bit, n_p=40 (ours)** | **96.1%** | **111 MB** | **k-means only** |
+| Method | Recall@10 | Packed | Resident | Training |
+|---|---|---|---|---|
+| FAISS IVF-PQ m=64, n_p=80 | 73.2% | 62 MB | ~62 MB¹ | PQ codebook |
+| FAISS OPQ+IVF-PQ m=128, n_p=80 | 97.0% | 123 MB | ~123 MB¹ | OPQ + PQ |
+| FAISS HNSW M=32, ef=64 | 98.2% | 732 MB | ~732 MB¹ | None |
+| ScaNN AH+tree, $L_s$=50 | 96.2% | 62 MB | ~62 MB¹ | ScaNN AH |
+| **IVF-TQ 6-bit, n_p=20 (ours)** | **93.2%** | **111 MB** | **~388 MB²** | **k-means only** |
+| **IVF-TQ 6-bit, n_p=40 (ours)** | **96.1%** | **111 MB** | **~388 MB²** | **k-means only** |
+
+¹ FAISS and ScaNN store byte-aligned C++ arrays; packed ≈ resident.
+² Compression-only (`store_raw_vectors=False`): numpy stores each b-bit index
+  as a full uint8 byte — indices(128MB) + sign\_bits(128MB) + norms(4MB) +
+  codes(128MB) + centroids(0.5MB). With raw vectors for reranking: ~900 MB.
+  Use `IVFTurboQuantIndex(store_raw_vectors=False)` to avoid the raw-vector cost.
 
 ### Streaming on 10M scale (3 seeds, sub-matched PQ memory)
 
@@ -219,7 +226,7 @@ IVF-PQ's codebook is trained on the initial sample. As new vectors arrive, PQ co
 | SIFT-10M | $+0.56 \pm 0.10$pp | $-5.80 \pm 0.55$pp | $-5.64 \pm 0.66$pp | $+0.17 \pm 0.50$pp ($p{=}0.29$) |
 | T2I-10M | $-0.76 \pm 0.41$pp | $-3.24 \pm 0.28$pp | $-3.34 \pm 0.49$pp | $-0.10 \pm 0.30$pp ($p{=}0.29$) |
 
-The same pattern persists at bit-matched and super-matched memory: across all 9 cells, retrain is indistinguishable from no-retrain in 8 of 9 (paired-$t$ $p \geq 0.14$); the 9th cell (SIFT-10M bit-matched) is $-0.08$pp opposite-sign, statistically significant but practically negligible. See per-batch trajectories under [`paper_supplementary/`](paper_supplementary/).
+The same pattern persists at bit-matched and super-matched memory: across all 9 cells, retrain is indistinguishable from no-retrain in 8 of 9 (paired-$t$ $p \geq 0.14$); the 9th cell (SIFT-10M bit-matched) is $-0.08$pp opposite-sign, statistically significant but practically negligible. See per-batch trajectories under [`paper_supplementary/`](paper_supplementary/) (supplementary analysis).
 
 ## Supported Embedding Dimensions
 
@@ -311,7 +318,7 @@ turboquant_search/
   cli.py                 # CLI entry point (tqs command)
 csrc/                    # NEON-accelerated C++ inner loop (built by setup.py)
 experiments/             # Reproducible benchmark scripts (see experiments/README.md)
-paper_supplementary/     # Per-dataset trajectories, full tables, supplementary docs
+paper_supplementary/     # Full trajectory tables and supplementary analysis
 tests/                   # Unit tests
 ```
 
@@ -338,7 +345,7 @@ Contributions welcome.
 
 ## Acknowledgements
 
-This work builds directly on Google Research's [TurboQuant](https://arxiv.org/abs/2504.19874) (Zandieh et al., 2025). The IVF-TQ contribution is the data-independent residual quantizer wrapped in an inverted-file index, the IVF-amplification analysis, and the streaming-stability evidence — not the underlying TurboQuant rotation + Lloyd–Max design, which is theirs.
+This work builds directly on Google Research's [TurboQuant](https://arxiv.org/abs/2504.19874) (Zandieh et al., ICLR 2026). The IVF-TQ contribution is the data-independent residual quantizer wrapped in an inverted-file index, the IVF-amplification analysis, and the streaming-stability evidence — not the underlying TurboQuant rotation + Lloyd–Max design, which is theirs.
 
 ## License
 

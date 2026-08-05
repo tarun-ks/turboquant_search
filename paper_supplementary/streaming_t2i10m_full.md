@@ -1,8 +1,6 @@
 # Streaming at 10M scale: T2I-10M, full three-regime table
 
-Referenced from main paper Table 5 (T2I-10M, bit-matched only). The
-sub-matched and super-matched blocks below were moved out of the main
-paper to keep within the PVLDB 12-page limit.
+Referenced from Table 5 (T2I-10M, bit-matched only). Supplementary analysis; included here for completeness.
 
 3 seeds (42, 123, 7777); mean ± 95% CI. IVF-TQ at $b = 4$ + sign-bit
 refinement (1032 bits/vec) across all regimes; only IVF-PQ varies.

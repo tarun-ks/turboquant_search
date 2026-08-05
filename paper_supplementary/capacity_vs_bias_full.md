@@ -1,8 +1,6 @@
 # Capacity-vs-bias control on SIFT-1M
 
-Referenced from main paper §4.1. Moved from the main paper to keep within
-the PVLDB 12-page limit; the one-paragraph summary in the main paper
-captures the headline negative result.
+Referenced from §4.1. Supplementary analysis; included here for completeness.
 
 ## Setup
 

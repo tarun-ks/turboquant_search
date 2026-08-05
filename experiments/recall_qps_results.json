@@ -1,0 +1,496 @@
+{
+  "SIFT-1M": {
+    "flat_tq_b4": {
+      "recall10": 69.26,
+      "qps": 190,
+      "memory_mb": 80.0
+    },
+    "ivf_tq_b4": [
+      {
+        "nprobe": 5,
+        "recall10": 71.75,
+        "qps": 10206,
+        "memory_mb": 80.5
+      },
+      {
+        "nprobe": 10,
+        "recall10": 81.98,
+        "qps": 7142,
+        "memory_mb": 80.5
+      },
+      {
+        "nprobe": 20,
+        "recall10": 87.6,
+        "qps": 4500,
+        "memory_mb": 80.5
+      },
+      {
+        "nprobe": 40,
+        "recall10": 89.67,
+        "qps": 2561,
+        "memory_mb": 80.5
+      },
+      {
+        "nprobe": 80,
+        "recall10": 90.25,
+        "qps": 1401,
+        "memory_mb": 80.5
+      }
+    ],
+    "ivf_tq_b5": [
+      {
+        "nprobe": 5,
+        "recall10": 73.64,
+        "qps": 10167,
+        "memory_mb": 96.5
+      },
+      {
+        "nprobe": 10,
+        "recall10": 84.89,
+        "qps": 7030,
+        "memory_mb": 96.5
+      },
+      {
+        "nprobe": 20,
+        "recall10": 91.42,
+        "qps": 4491,
+        "memory_mb": 96.5
+      },
+      {
+        "nprobe": 40,
+        "recall10": 93.93,
+        "qps": 2588,
+        "memory_mb": 96.5
+      },
+      {
+        "nprobe": 80,
+        "recall10": 94.65,
+        "qps": 1407,
+        "memory_mb": 96.5
+      }
+    ],
+    "ivf_tq_b6": [
+      {
+        "nprobe": 5,
+        "recall10": 74.34,
+        "qps": 10015,
+        "memory_mb": 112.5
+      },
+      {
+        "nprobe": 10,
+        "recall10": 86.14,
+        "qps": 6988,
+        "memory_mb": 112.5
+      },
+      {
+        "nprobe": 20,
+        "recall10": 93.18,
+        "qps": 4414,
+        "memory_mb": 112.5
+      },
+      {
+        "nprobe": 40,
+        "recall10": 95.98,
+        "qps": 2539,
+        "memory_mb": 112.5
+      },
+      {
+        "nprobe": 80,
+        "recall10": 96.82,
+        "qps": 1382,
+        "memory_mb": 112.5
+      }
+    ],
+    "ivf_pq_m64": [
+      {
+        "nprobe": 5,
+        "recall10": 61.84,
+        "qps": 102368,
+        "memory_mb": 64.0
+      },
+      {
+        "nprobe": 10,
+        "recall10": 68.54,
+        "qps": 62529,
+        "memory_mb": 64.0
+      },
+      {
+        "nprobe": 20,
+        "recall10": 71.8,
+        "qps": 34570,
+        "memory_mb": 64.0
+      },
+      {
+        "nprobe": 40,
+        "recall10": 72.92,
+        "qps": 18270,
+        "memory_mb": 64.0
+      },
+      {
+        "nprobe": 80,
+        "recall10": 73.19,
+        "qps": 9453,
+        "memory_mb": 64.0
+      }
+    ],
+    "ivf_pq_m128": [
+      {
+        "nprobe": 5,
+        "recall10": 73.25,
+        "qps": 51215,
+        "memory_mb": 128.0
+      },
+      {
+        "nprobe": 10,
+        "recall10": 84.11,
+        "qps": 27616,
+        "memory_mb": 128.0
+      },
+      {
+        "nprobe": 20,
+        "recall10": 89.93,
+        "qps": 15535,
+        "memory_mb": 128.0
+      },
+      {
+        "nprobe": 40,
+        "recall10": 92.2,
+        "qps": 8031,
+        "memory_mb": 128.0
+      },
+      {
+        "nprobe": 80,
+        "recall10": 92.8,
+        "qps": 4072,
+        "memory_mb": 128.0
+      }
+    ],
+    "hnsw_m32": [
+      {
+        "ef_search": 16,
+        "recall10": 85.78,
+        "qps": 147486,
+        "memory_mb": 768.0
+      },
+      {
+        "ef_search": 32,
+        "recall10": 94.27,
+        "qps": 87065,
+        "memory_mb": 768.0
+      },
+      {
+        "ef_search": 64,
+        "recall10": 98.19,
+        "qps": 48307,
+        "memory_mb": 768.0
+      },
+      {
+        "ef_search": 128,
+        "recall10": 99.57,
+        "qps": 24718,
+        "memory_mb": 768.0
+      },
+      {
+        "ef_search": 256,
+        "recall10": 99.91,
+        "qps": 13118,
+        "memory_mb": 768.0
+      }
+    ],
+    "ext_rabitq_B5": [
+      {
+        "nprobe": 5,
+        "recall10": 71.88,
+        "qps": 13781,
+        "memory_mb": 80.5
+      },
+      {
+        "nprobe": 10,
+        "recall10": 82.09,
+        "qps": 8853,
+        "memory_mb": 80.5
+      },
+      {
+        "nprobe": 20,
+        "recall10": 87.67,
+        "qps": 5204,
+        "memory_mb": 80.5
+      },
+      {
+        "nprobe": 40,
+        "recall10": 89.73,
+        "qps": 2809,
+        "memory_mb": 80.5
+      },
+      {
+        "nprobe": 80,
+        "recall10": 90.3,
+        "qps": 1506,
+        "memory_mb": 80.5
+      }
+    ],
+    "ext_rabitq_B6": [
+      {
+        "nprobe": 5,
+        "recall10": 73.42,
+        "qps": 14363,
+        "memory_mb": 96.5
+      },
+      {
+        "nprobe": 10,
+        "recall10": 84.57,
+        "qps": 8970,
+        "memory_mb": 96.5
+      },
+      {
+        "nprobe": 20,
+        "recall10": 91.0,
+        "qps": 5298,
+        "memory_mb": 96.5
+      },
+      {
+        "nprobe": 40,
+        "recall10": 93.48,
+        "qps": 2790,
+        "memory_mb": 96.5
+      },
+      {
+        "nprobe": 80,
+        "recall10": 94.18,
+        "qps": 1508,
+        "memory_mb": 96.5
+      }
+    ]
+  },
+  "Deep-1M": {
+    "flat_tq_b4": {
+      "recall10": 82.55,
+      "qps": 152,
+      "memory_mb": 60.0
+    },
+    "ivf_tq_b4": [
+      {
+        "nprobe": 5,
+        "recall10": 78.22,
+        "qps": 10795,
+        "memory_mb": 60.4
+      },
+      {
+        "nprobe": 10,
+        "recall10": 85.82,
+        "qps": 7477,
+        "memory_mb": 60.4
+      },
+      {
+        "nprobe": 20,
+        "recall10": 89.61,
+        "qps": 4708,
+        "memory_mb": 60.4
+      },
+      {
+        "nprobe": 40,
+        "recall10": 91.25,
+        "qps": 2667,
+        "memory_mb": 60.4
+      },
+      {
+        "nprobe": 80,
+        "recall10": 91.84,
+        "qps": 1437,
+        "memory_mb": 60.4
+      }
+    ],
+    "ivf_tq_b5": [
+      {
+        "nprobe": 5,
+        "recall10": 80.15,
+        "qps": 11091,
+        "memory_mb": 72.4
+      },
+      {
+        "nprobe": 10,
+        "recall10": 88.42,
+        "qps": 7578,
+        "memory_mb": 72.4
+      },
+      {
+        "nprobe": 20,
+        "recall10": 92.74,
+        "qps": 4710,
+        "memory_mb": 72.4
+      },
+      {
+        "nprobe": 40,
+        "recall10": 94.7,
+        "qps": 2659,
+        "memory_mb": 72.4
+      },
+      {
+        "nprobe": 80,
+        "recall10": 95.44,
+        "qps": 1403,
+        "memory_mb": 72.4
+      }
+    ],
+    "ivf_tq_b6": [
+      {
+        "nprobe": 5,
+        "recall10": 81.05,
+        "qps": 11150,
+        "memory_mb": 84.4
+      },
+      {
+        "nprobe": 10,
+        "recall10": 89.75,
+        "qps": 7435,
+        "memory_mb": 84.4
+      },
+      {
+        "nprobe": 20,
+        "recall10": 94.34,
+        "qps": 4606,
+        "memory_mb": 84.4
+      },
+      {
+        "nprobe": 40,
+        "recall10": 96.45,
+        "qps": 2639,
+        "memory_mb": 84.4
+      },
+      {
+        "nprobe": 80,
+        "recall10": 97.28,
+        "qps": 1446,
+        "memory_mb": 84.4
+      }
+    ],
+    "ivf_pq_m64": [
+      {
+        "nprobe": 5,
+        "recall10": 73.7,
+        "qps": 125075,
+        "memory_mb": 64.0
+      },
+      {
+        "nprobe": 10,
+        "recall10": 80.27,
+        "qps": 77628,
+        "memory_mb": 64.0
+      },
+      {
+        "nprobe": 20,
+        "recall10": 83.44,
+        "qps": 42246,
+        "memory_mb": 64.0
+      },
+      {
+        "nprobe": 40,
+        "recall10": 84.76,
+        "qps": 23655,
+        "memory_mb": 64.0
+      },
+      {
+        "nprobe": 80,
+        "recall10": 85.2,
+        "qps": 12083,
+        "memory_mb": 64.0
+      }
+    ],
+    "hnsw_m32": [
+      {
+        "ef_search": 16,
+        "recall10": 85.81,
+        "qps": 152513,
+        "memory_mb": 640.0
+      },
+      {
+        "ef_search": 32,
+        "recall10": 93.63,
+        "qps": 92241,
+        "memory_mb": 640.0
+      },
+      {
+        "ef_search": 64,
+        "recall10": 97.67,
+        "qps": 51337,
+        "memory_mb": 640.0
+      },
+      {
+        "ef_search": 128,
+        "recall10": 99.29,
+        "qps": 27023,
+        "memory_mb": 640.0
+      },
+      {
+        "ef_search": 256,
+        "recall10": 99.83,
+        "qps": 14958,
+        "memory_mb": 640.0
+      }
+    ],
+    "ext_rabitq_B5": [
+      {
+        "nprobe": 5,
+        "recall10": 78.23,
+        "qps": 14493,
+        "memory_mb": 60.4
+      },
+      {
+        "nprobe": 10,
+        "recall10": 85.84,
+        "qps": 8658,
+        "memory_mb": 60.4
+      },
+      {
+        "nprobe": 20,
+        "recall10": 89.6,
+        "qps": 5187,
+        "memory_mb": 60.4
+      },
+      {
+        "nprobe": 40,
+        "recall10": 91.24,
+        "qps": 2813,
+        "memory_mb": 60.4
+      },
+      {
+        "nprobe": 80,
+        "recall10": 91.86,
+        "qps": 1330,
+        "memory_mb": 60.4
+      }
+    ],
+    "ext_rabitq_B6": [
+      {
+        "nprobe": 5,
+        "recall10": 79.97,
+        "qps": 13939,
+        "memory_mb": 72.4
+      },
+      {
+        "nprobe": 10,
+        "recall10": 88.21,
+        "qps": 9083,
+        "memory_mb": 72.4
+      },
+      {
+        "nprobe": 20,
+        "recall10": 92.44,
+        "qps": 5173,
+        "memory_mb": 72.4
+      },
+      {
+        "nprobe": 40,
+        "recall10": 94.33,
+        "qps": 2850,
+        "memory_mb": 72.4
+      },
+      {
+        "nprobe": 80,
+        "recall10": 95.05,
+        "qps": 1521,
+        "memory_mb": 72.4
+      }
+    ]
+  }
+}

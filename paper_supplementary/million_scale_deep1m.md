@@ -1,9 +1,6 @@
 # Million-Scale Comparison: Deep-1M block
 
-Referenced from main paper §5 (Million-Scale Comparison, Table 9).
-The Deep-1M block was moved to this supplementary file to keep the main
-paper within the PVLDB 12-page limit; SIFT-1M and Deep-10M remain in
-the paper.
+Referenced from §5 (Million-Scale Comparison, Table 9). Supplementary analysis; included here for completeness.
 
 ## Deep-1M (1M vectors, dim = 96)
 

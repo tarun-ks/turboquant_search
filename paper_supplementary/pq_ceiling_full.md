@@ -1,7 +1,6 @@
 # PQ recall ceiling (SIFT-1M)
 
-Referenced from main paper §3.2 (IVF amplification). Moved out of the paper
-to keep within the PVLDB 12-page limit. The point made in the main paper:
+Referenced from §3.2 (IVF amplification). Supplementary analysis; included here for completeness.
 for any fixed PQ configuration, IVF-PQ exhibits a per-configuration recall
 ceiling that scales with the bit budget; IVF-TQ's ceiling is set by $(b, d)$
 alone via the rate-distortion floor $\sqrt{D_b}$.

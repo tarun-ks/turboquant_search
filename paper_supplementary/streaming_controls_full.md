@@ -1,10 +1,7 @@
 # SIFT-1M streaming controls: distribution-shift hypothesis test
 
-Referenced from main paper §4.1 (Mechanism: capacity-bound, dataset-dependent).
-Moved out of the paper to keep within the PVLDB 12-page limit. The
-capacity-vs-bias control (Table 4 of the main paper) is the stronger of the
-two §4.1 controls and remains in the paper; this file holds the
-three-condition shift control.
+Referenced from §4.1 (Mechanism: capacity-bound, dataset-dependent).
+Supplementary analysis; included here for completeness.
 
 ## Setup
 

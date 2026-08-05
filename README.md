@@ -17,10 +17,10 @@ An IVF index whose residual compression layer is **codebook-free**: a fixed rand
 **Why it matters.** Production ANN compression methods (PQ, OPQ, ScaNN, RaBitQ) fit a codebook to an initial training sample and reuse it as the database grows. The codebook silently goes stale. Across 3 seeds (42, 123, 7777) on streaming 10M ingestion at sub-matched memory ($\sim$0.75–0.78× IVF-TQ):
 
 - Deep-10M: IVF-PQ drops $-3.23 \pm 0.49$pp; IVF-TQ holds at $-0.80 \pm 0.25$pp.
-- SIFT-10M: IVF-PQ drops $-5.80 \pm 0.55$pp; IVF-TQ *improves* by $+0.56 \pm 0.10$pp.
+- SIFT-10M: IVF-PQ drops $-5.80 \pm 0.31$pp; IVF-TQ *improves* by $+0.56 \pm 0.21$pp.
 - T2I-10M (200-dim, Yandex Text2Image-1B prefix): IVF-PQ drops $-3.24 \pm 0.28$pp; IVF-TQ holds at $-0.76 \pm 0.41$pp.
 
-Per-batch PQ retraining is statistically indistinguishable from no retraining in 8 of 9 cells across (3 datasets × 3 memory regimes). At bit-matched memory ($\sim$0.95× IVF-TQ), IVF-PQ stabilises on Deep-10M and T2I-10M but **still degrades on SIFT-10M** ($-2.31$pp, $+6.79$pp behind IVF-TQ) — the capacity threshold for PQ streaming stability is dataset-dependent. **IVF-TQ's residual quantizer has no data-dependent codebook** — the $(b, d)$ configuration is fixed at build time and independent of corpus size.
+Per-batch PQ retraining is statistically indistinguishable from no retraining in 8 of 9 cells across (3 datasets × 3 memory regimes). At bit-matched memory ($\sim$0.95× IVF-TQ), IVF-PQ stabilises on Deep-10M and T2I-10M but **still degrades on SIFT-10M** ($-2.31$pp, $+6.83$pp behind IVF-TQ) — the capacity threshold for PQ streaming stability is dataset-dependent. **IVF-TQ's residual quantizer has no data-dependent codebook** — the $(b, d)$ configuration is fixed at build time and independent of corpus size.
 
 ## Quick benchmarks
 
@@ -223,7 +223,7 @@ IVF-PQ's codebook is trained on the initial sample. As new vectors arrive, PQ co
 | Dataset | IVF-TQ Δ (1M → 10M) | IVF-PQ (stale) Δ | IVF-PQ (retrain) Δ | retrain − stale |
 |---|---|---|---|---|
 | Deep-10M | $-0.80 \pm 0.25$pp | $-3.23 \pm 0.49$pp | $-3.17 \pm 0.15$pp | $+0.06 \pm 0.44$pp ($p{=}0.60$) |
-| SIFT-10M | $+0.56 \pm 0.10$pp | $-5.80 \pm 0.55$pp | $-5.64 \pm 0.66$pp | $+0.17 \pm 0.50$pp ($p{=}0.29$) |
+| SIFT-10M | $+0.56 \pm 0.21$pp | $-5.80 \pm 0.31$pp | $-5.64 \pm 0.27$pp | $+0.17 \pm 0.50$pp ($p{=}0.29$) |
 | T2I-10M | $-0.76 \pm 0.41$pp | $-3.24 \pm 0.28$pp | $-3.34 \pm 0.49$pp | $-0.10 \pm 0.30$pp ($p{=}0.29$) |
 
 The same pattern persists at bit-matched and super-matched memory: across all 9 cells, retrain is indistinguishable from no-retrain in 8 of 9 (paired-$t$ $p \geq 0.14$); the 9th cell (SIFT-10M bit-matched) is $-0.08$pp opposite-sign, statistically significant but practically negligible. See per-batch trajectories under [`paper_supplementary/`](paper_supplementary/) (supplementary analysis).

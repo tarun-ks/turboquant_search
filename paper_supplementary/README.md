@@ -1,11 +1,7 @@
-# Paper Supplementary Materials
+# Supplementary Materials
 
-This directory contains supplementary materials for the PVLDB Vol 20 submission
-**"IVF-TQ: Calibration-Free Streaming Vector Search via a Codebook-Free Residual Layer."**
-
-Content here is referenced from the paper but moved out of the 12-page submission
-to keep the main body + retained appendices (A, B Proofs, C Reproducibility)
-within the PVLDB page limit. All claims, tables, and trajectories below are
+This directory contains supplementary analysis for the IVF-TQ /
+turboquant-search project. All claims, tables, and trajectories are
 reproducible from [`experiments/`](../experiments/) using the seeds listed in
 each file.
 

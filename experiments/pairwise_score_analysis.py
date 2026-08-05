@@ -9,10 +9,11 @@ that outranks it, compute:
   z_ij = e_j - e_i  (pairwise signed perturbation)
   crossing: z_ij ≥ m_ij  (should be ~100% by definition of score miss)
 
-Decomposition of crossing cause:
-  TN-only:   -e_i alone ≥ m_ij  (neighbor underestimation sufficient alone)
-  FP-only:    e_j alone ≥ m_ij  (competitor overestimation sufficient alone)
-  Joint:      neither alone, but z_ij ≥ m_ij  (interaction required)
+Decomposition of crossing cause (four mutually exclusive, exhaustive categories):
+  TN-only:   -e_i alone ≥ m_ij  AND  e_j < m_ij
+  FP-only:    e_j alone ≥ m_ij  AND  -e_i < m_ij
+  Both:       each error independently sufficient (-e_i ≥ m_ij AND e_j ≥ m_ij)
+  Joint:      neither alone sufficient; only z_ij ≥ m_ij
   TN-dom:    -e_i > e_j  (neighbor component larger, regardless of sufficiency)
   FP-dom:     e_j > -e_i (competitor component larger)
 
@@ -182,7 +183,7 @@ def _pairwise_decomposition(base, queries_normed, pq, N,
 
     rows = []
     total_pairs = 0
-    tn_only_tot = fp_only_tot = joint_tot = 0
+    tn_only_tot = fp_only_tot = both_tot = joint_tot = 0
     tn_dom_tot  = fp_dom_tot  = 0
     e_i_vals, e_j_vals, m_vals = [], [], []
 
@@ -220,11 +221,12 @@ def _pairwise_decomposition(base, queries_normed, pq, N,
                 e_j_vals.append(e_j)
                 m_vals.append(m_ij)
 
-                tn_alone = (-e_i) >= m_ij
-                fp_alone = e_j    >= m_ij
-                if tn_alone:    tn_only_tot += 1
-                if fp_alone:    fp_only_tot += 1
-                if not tn_alone and not fp_alone:  joint_tot += 1
+                tn_sufficient = (-e_i) >= m_ij
+                fp_sufficient = e_j    >= m_ij
+                if   tn_sufficient and not fp_sufficient: tn_only_tot += 1
+                elif fp_sufficient and not tn_sufficient: fp_only_tot += 1
+                elif tn_sufficient and fp_sufficient:     both_tot    += 1
+                else:                                     joint_tot   += 1
 
                 if (-e_i) > e_j:  tn_dom_tot += 1
                 else:             fp_dom_tot += 1
@@ -242,6 +244,7 @@ def _pairwise_decomposition(base, queries_normed, pq, N,
         "n_pairs":     total_pairs,
         "tn_only_pct": 100 * tn_only_tot / total_pairs,
         "fp_only_pct": 100 * fp_only_tot / total_pairs,
+        "both_pct":    100 * both_tot    / total_pairs,
         "joint_pct":   100 * joint_tot   / total_pairs,
         "tn_dom_pct":  100 * tn_dom_tot  / total_pairs,
         "fp_dom_pct":  100 * fp_dom_tot  / total_pairs,
@@ -258,6 +261,7 @@ def _pairwise_decomposition(base, queries_normed, pq, N,
     log(f"    corpus_n={corpus_n//1_000_000}M: {total_pairs} pairs | "
         f"TN-only {100*tn_only_tot/total_pairs:.1f}% "
         f"FP-only {100*fp_only_tot/total_pairs:.1f}% "
+        f"Both {100*both_tot/total_pairs:.1f}% "
         f"Joint {100*joint_tot/total_pairs:.1f}% "
         f"TN-dom {100*tn_dom_tot/total_pairs:.1f}% "
         f"FP-dom {100*fp_dom_tot/total_pairs:.1f}%")
@@ -303,8 +307,9 @@ def main():
         sub = df[df["corpus_n"] == N]
         print(f"\n{dataset} @ {N//1_000_000}M (n={len(sub)} seeds):")
         for col, label in [
-            ("tn_only_pct", "TN-only sufficient"),
-            ("fp_only_pct", "FP-only sufficient"),
+            ("tn_only_pct", "TN-only (excl.)"),
+            ("fp_only_pct", "FP-only (excl.)"),
+            ("both_pct",    "Both sufficient"),
             ("joint_pct",   "Joint (neither alone)"),
             ("tn_dom_pct",  "TN-dominated (larger component)"),
             ("fp_dom_pct",  "FP-dominated (larger component)"),

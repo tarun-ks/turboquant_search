@@ -100,26 +100,24 @@ python experiments/rank_margin.py --dataset sift10m
 python experiments/rank_margin.py --dataset deep10m
 python experiments/rank_margin.py --dataset t2i10m
 
-# Step 4: Per-query causal decomposition (3 seeds, ~5–8 min/seed)
-# Output: experiments/results/perquery_{dataset}.csv  (10K rows × 3 seeds)
-python experiments/perquery_analysis.py --dataset sift10m
-python experiments/perquery_analysis.py --dataset deep10m
-python experiments/perquery_analysis.py --dataset t2i10m
+# Step 4: Pairwise signed-error decomposition (SIFT-10M, 3 seeds, ~5–8 min/seed)
+# Output: experiments/results/pairwise_analysis_sift10m.csv
+python experiments/pairwise_score_analysis.py --dataset sift10m
 
 # Step 5: Bootstrap CIs on margin/err ratio — confirms ordering is real
 # Output: experiments/results/bootstrap_ci_summary.csv
 python experiments/bootstrap_ci.py
 ```
 
-**Expected key numbers** (3 seeds, 10K queries each):
+**Margin/distortion diagnostic at 10M** (3 seeds, 95% CI from rank_margin.py):
 
-| Dataset | Coverage losses | err > margin (of ranking losses) | ratio CI (95%) |
+| Dataset | $\rho$ mean | 95% CI | $\Delta L_\text{score}$ (1M→10M) |
 |---|---|---|---|
-| SIFT-10M | 0% | 94.5% ± 0.5% | [0.136, 0.147] |
-| T2I-10M  | 0% | 89.8% ± 1.7% | [0.235, 0.252] |
-| Deep-10M | 0% | 87.7% ± 0.6% | [0.265, 0.285] |
+| SIFT-10M | 0.141 | [0.140, 0.143] | +6.22 pp |
+| T2I-10M  | 0.238 | [0.234, 0.242] | +3.06 pp |
+| Deep-10M | 0.269 | [0.263, 0.275] | +3.19 pp |
 
-All three dataset CIs are fully separated — ratio strictly orders degradation severity. The SIFT–Deep crossing-fraction gap (94.5% vs 87.7%) is predicted by the ratio ordering (lower ratio → more boundary-adjacent neighbors → higher crossing fraction).
+All three dataset CIs are non-overlapping. The $\rho$ ordering is consistent with the scoring-loss ordering (SIFT: lowest $\rho$, largest scoring-loss increase).
 
 Memory: ~16 GB RAM needed for T2I-10M (200-d, 10M vectors). SIFT and Deep run on 8 GB.
 
@@ -331,8 +329,8 @@ tests/                   # Unit tests
 * ✅ Adaptive coarse-partition refresh
 * ✅ Encoder-swap robustness (3-seed paired-$t$, MS MARCO)
 * ✅ NEON-accelerated C++ inner loop
-* ✅ Corpus-growth degradation mechanism: per-miss causal decomposition (3 datasets × 3 seeds); 87–94% of losses have err > margin, 0% coverage losses across all datasets
-* ✅ Bootstrap CIs on margin/err ratio: all three datasets (SIFT/T2I/Deep) fully separated — ratio strictly orders degradation severity
+* ✅ Corpus-growth degradation mechanism: exact routing/scoring decomposition and pairwise signed-error analysis (3 datasets × 3 seeds)
+* ✅ Margin/distortion diagnostic ($\rho$): non-overlapping 95% CIs across all three datasets at 10M; consistent with dataset-level scoring-loss ordering
 
 ### Future work
 * FastScan-style SIMD LUTs (int8) to further reduce QPS gap with FAISS

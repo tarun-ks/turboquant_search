@@ -88,3 +88,5 @@ experiments/neural_quantizer/
 *.jpg
 *.jpeg
 !docs/dashboard.png
+
+paper_is/
